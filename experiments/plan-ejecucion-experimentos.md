@@ -25,8 +25,8 @@ Dos experimentos, una jornada compartida de 4–6 horas. Se ejecutan secuencialm
 ### Tareas
 
 1. **Provisionar namespace de staging en EKS con Terraform**
-   - Clonar el repo de infra: `miso-proyecto-final-2026/infra`
-   - Ejecutar `terraform plan` → `terraform apply` para el namespace `solventa-staging`
+   - Clonar el repo de infra: `miso-proyecto-final-2026/solventa-experimentos`
+   - Ejecutar el script de `./scripts/setup.sh` que corre el `terraform plan` → `terraform apply` para el namespace `solventa-staging`
    - Verificar que los pods de los microservicios estén en `Running`
    - Componentes a levantar: MS Cotización, MS Perfilamiento, Redis, PostgreSQL, Mock Open Finance
 
