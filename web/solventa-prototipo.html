@@ -286,25 +286,77 @@
 
     function ClaimsPage({t,lang}) {
       const [tab,setTab]=useState("parametric");
+      const [claimState,setClaimState]=useState("form"); // form | submitting | submitted
+      const [claimDesc,setClaimDesc]=useState("");
+      const [fileName,setFileName]=useState("");
+      const [descError,setDescError]=useState(false);
+
+      const handleSubmit=()=>{
+        if(!claimDesc.trim()){setDescError(true);return}
+        setDescError(false);setClaimState("submitting");
+        setTimeout(()=>setClaimState("submitted"),2000);
+      };
+      const handleNewClaim=()=>{setClaimState("form");setClaimDesc("");setFileName("");setDescError(false)};
+      const handleFile=()=>{setFileName(lang==="es"?"foto_dano_cocina.jpg":"kitchen_damage_photo.jpg")};
+
       return <div>
         <h1 style={S.h1}>{t.claims.title}</h1><p style={S.sub}>{t.tagline}</p>
-        <div style={{display:"flex",gap:8,marginBottom:20}}><button style={{...S.btn(tab==="parametric"?"primary":"outline"),fontSize:13,padding:"7px 16px"}} onClick={()=>setTab("parametric")}>{t.claims.parametric}</button><button style={{...S.btn(tab==="manual"?"primary":"outline"),fontSize:13,padding:"7px 16px"}} onClick={()=>setTab("manual")}>{t.claims.manual}</button></div>
+        <div style={{display:"flex",gap:8,marginBottom:20}}><button style={{...S.btn(tab==="parametric"?"primary":"outline"),fontSize:13,padding:"7px 16px"}} onClick={()=>{setTab("parametric");handleNewClaim()}}>{t.claims.parametric}</button><button style={{...S.btn(tab==="manual"?"primary":"outline"),fontSize:13,padding:"7px 16px"}} onClick={()=>setTab("manual")}>{t.claims.manual}</button></div>
         {tab==="parametric"?<div>{mockEvents.map((e,i)=><div key={i} style={S.card} role="article">
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8}}><div><span style={S.tag}>{t.claims.automatic}</span><h3 style={{...S.h3,marginTop:8}}>{lang==="es"?e.type:e.typeEn}</h3></div><span style={S.badge(e.status)}>{e.status==="paid"?t.claims.paid:t.claims.pending}</span></div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginTop:12}}><div><span style={{fontSize:12,color:C.textLight}}>{t.claims.eventDate}</span><div style={{fontSize:14}}>{formatDate(e.date,t.dateLocale)}</div></div><div><span style={{fontSize:12,color:C.textLight}}>{t.claims.amount}</span><div style={{fontSize:14,fontWeight:600,color:C.accent}}>{formatCOP(e.amount)}</div></div></div>
         </div>)}</div>
-        :<div style={S.card}><p style={{fontSize:14,color:C.textLight,marginBottom:16}}>{t.claims.reportDesc}</p>
-          <div style={{display:"grid",gap:14}}><div><label style={S.label} htmlFor="cp">{t.claims.selectPolicy}</label><select id="cp" style={S.input}>{mockPolicies.map(p=><option key={p.id}>{p.id} — {lang==="es"?p.product:p.productEn}</option>)}</select></div>
-          <div><label style={S.label} htmlFor="cd">{t.claims.description}</label><textarea id="cd" style={{...S.input,minHeight:80,resize:"vertical"}}/></div>
-          <div><label style={S.label}>{t.claims.attachEvidence}</label><div style={{padding:20,border:`2px dashed ${C.border}`,borderRadius:8,textAlign:"center",color:C.textLight,fontSize:13,cursor:"pointer"}}>📎 {t.claims.attachEvidence}</div></div></div>
-          <button style={{...S.btn(),marginTop:16}}>{t.claims.submit}</button>
-        </div>}
+        :claimState==="submitted"
+          ?<div style={{...S.card,textAlign:"center"}}>
+            <div style={{fontSize:48,marginBottom:8}}>✅</div>
+            <h2 style={{...S.h2,color:C.success}}>{lang==="es"?"¡Siniestro reportado!":"Claim reported!"}</h2>
+            <div style={{padding:16,background:C.successBg,borderRadius:8,marginBottom:16,display:"inline-block"}}>
+              <div style={{fontSize:12,color:C.success}}>{lang==="es"?"Número de radicado":"Case number"}</div>
+              <div style={{fontSize:18,fontWeight:700,color:C.success}}>SIN-2026-004718</div>
+            </div>
+            <p style={{fontSize:14,color:C.textLight,marginBottom:20,maxWidth:400,marginLeft:"auto",marginRight:"auto"}}>{lang==="es"?"Tu reporte ha sido recibido. Recibirás una notificación con el avance de tu caso en las próximas 24 horas.":"Your report has been received. You'll receive a notification with case updates within the next 24 hours."}</p>
+            <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
+              <button style={S.btn("outline")} onClick={handleNewClaim}>{lang==="es"?"Nuevo reporte":"New report"}</button>
+              <button style={S.btn()} onClick={()=>setTab("parametric")}>{lang==="es"?"Ver mis siniestros":"View my claims"}</button>
+            </div>
+          </div>
+          :claimState==="submitting"
+            ?<div style={{...S.card,textAlign:"center",padding:40}} role="status" aria-live="polite">
+              <div style={{fontSize:32,marginBottom:12}}>📤</div>
+              <p style={{color:C.textLight,fontSize:14}}>{lang==="es"?"Enviando reporte de siniestro...":"Submitting claim report..."}</p>
+            </div>
+          :<div style={S.card}><p style={{fontSize:14,color:C.textLight,marginBottom:16}}>{t.claims.reportDesc}</p>
+            <div style={{display:"grid",gap:14}}>
+              <div><label style={S.label} htmlFor="cp">{t.claims.selectPolicy}</label><select id="cp" style={S.input}>{mockPolicies.map(p=><option key={p.id}>{p.id} — {lang==="es"?p.product:p.productEn}</option>)}</select></div>
+              <div>
+                <label style={S.label} htmlFor="cd">{t.claims.description}</label>
+                <textarea id="cd" style={{...S.input,minHeight:80,resize:"vertical",borderColor:descError?C.error:C.border}} value={claimDesc} onChange={e=>{setClaimDesc(e.target.value);setDescError(false)}} placeholder={lang==="es"?"Describe lo que ocurrió, cuándo y los daños observados...":"Describe what happened, when, and the damages observed..."}/>
+                {descError&&<span style={{fontSize:12,color:C.error}}>{lang==="es"?"La descripción es obligatoria":"Description is required"}</span>}
+              </div>
+              <div><label style={S.label}>{t.claims.attachEvidence}</label>
+                {fileName
+                  ?<div style={{padding:12,background:C.successBg,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                    <span style={{fontSize:13,color:C.success}}>📄 {fileName}</span>
+                    <button style={{background:"none",border:"none",color:C.error,fontSize:13,fontWeight:600}} onClick={()=>setFileName("")}>✕</button>
+                  </div>
+                  :<div onClick={handleFile} style={{padding:20,border:`2px dashed ${C.border}`,borderRadius:8,textAlign:"center",color:C.textLight,fontSize:13,cursor:"pointer"}}>📎 {t.claims.attachEvidence}</div>}
+              </div>
+            </div>
+            <button style={{...S.btn(),marginTop:16}} onClick={handleSubmit}>{t.claims.submit}</button>
+          </div>
+        }
       </div>;
     }
 
-    function ProfilePage({t,lang,onLang}) {
+    function ProfilePage({t,lang,onLang,fs,onFs,consentGranted,onRevoke,onGrant}) {
+      const [showRevokeConfirm,setShowRevokeConfirm]=useState(false);
+      const [revokeToast,setRevokeToast]=useState(null);
+      const handleRevoke=()=>{onRevoke();setShowRevokeConfirm(false);setRevokeToast(lang==="es"?"✓ Consentimiento revocado exitosamente":"✓ Consent revoked successfully");setTimeout(()=>setRevokeToast(null),3000)};
+      const handleGrant=()=>{onGrant();setRevokeToast(lang==="es"?"✓ Consentimiento otorgado exitosamente":"✓ Consent granted successfully");setTimeout(()=>setRevokeToast(null),3000)};
+
       return <div>
         <h1 style={S.h1}>{t.profile.title}</h1><p style={S.sub}>{t.tagline}</p>
+        {revokeToast&&<div role="status" aria-live="polite" style={{padding:12,background:consentGranted?C.successBg:C.warnBg,borderRadius:8,marginBottom:16,fontSize:14,fontWeight:500,color:consentGranted?C.success:C.warn}}>{revokeToast}</div>}
         <div style={S.card}><h2 style={S.h2}>{t.profile.personalInfo}</h2>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
             {[[t.profile.name,"Stiven Cardona Monsalve"],[t.profile.document,"CC 1.XXX.XXX.XXX"],[t.profile.email,"stiven@email.com"],[t.profile.phone,"+57 3XX XXX XXXX"]].map(([l,v],i)=><div key={i}><span style={{fontSize:12,color:C.textLight}}>{l}</span><div style={{fontSize:14,fontWeight:500}}>{v}</div></div>)}
@@ -312,26 +364,45 @@
         </div>
         <div style={S.card}><h2 style={S.h2}>{t.profile.consents}</h2>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${C.border}`,flexWrap:"wrap",gap:8}}>
-            <div><div style={{fontSize:14,fontWeight:500}}>Open Finance — {lang==="es"?"Datos financieros":"Financial data"}</div><div style={{fontSize:12,color:C.textLight}}>{t.profile.consentStatus}: <span style={{color:C.success,fontWeight:600}}>{t.profile.granted}</span></div></div>
-            <button style={{...S.btn("outline"),fontSize:12,padding:"5px 12px",color:C.error,borderColor:C.error}}>{t.profile.revokeConsent}</button>
+            <div><div style={{fontSize:14,fontWeight:500}}>Open Finance — {lang==="es"?"Datos financieros":"Financial data"}</div>
+              <div style={{fontSize:12,color:C.textLight}}>{t.profile.consentStatus}: {consentGranted
+                ?<span style={{color:C.success,fontWeight:600}}>{t.profile.granted}</span>
+                :<span style={{color:C.error,fontWeight:600}}>{lang==="es"?"Revocado":"Revoked"}</span>}
+              </div>
+            </div>
+            {consentGranted
+              ?<button style={{...S.btn("outline"),fontSize:12,padding:"5px 12px",color:C.error,borderColor:C.error}} onClick={()=>setShowRevokeConfirm(true)}>{t.profile.revokeConsent}</button>
+              :<button style={{...S.btn(),fontSize:12,padding:"5px 12px"}} onClick={handleGrant}>{lang==="es"?"Otorgar de nuevo":"Grant again"}</button>}
           </div>
+          {showRevokeConfirm&&<div style={{marginTop:12,padding:16,background:C.warnBg,borderRadius:8}}>
+            <p style={{fontSize:13,color:C.warn,marginBottom:12,fontWeight:500}}>{lang==="es"?"¿Estás seguro? Al revocar el consentimiento, Solventa no podrá consultar tus datos financieros para personalizar tus cotizaciones.":"Are you sure? By revoking consent, Solventa won't be able to access your financial data to personalize your quotes."}</p>
+            <div style={{display:"flex",gap:8}}>
+              <button style={{...S.btn(),fontSize:12,padding:"6px 14px",background:C.error}} onClick={handleRevoke}>{lang==="es"?"Sí, revocar":"Yes, revoke"}</button>
+              <button style={{...S.btn("outline"),fontSize:12,padding:"6px 14px"}} onClick={()=>setShowRevokeConfirm(false)}>{lang==="es"?"Cancelar":"Cancel"}</button>
+            </div>
+          </div>}
         </div>
         <div style={S.card}><h2 style={S.h2}>{t.profile.language} / {t.profile.accessibility}</h2>
           <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}><span style={{fontSize:13,fontWeight:500}}>{t.profile.language}:</span><button style={{...S.btn(lang==="es"?"primary":"outline"),padding:"5px 14px",fontSize:12}} onClick={()=>onLang("es")}>Español</button><button style={{...S.btn(lang==="en"?"primary":"outline"),padding:"5px 14px",fontSize:12}} onClick={()=>onLang("en")}>English</button></div>
-          <div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}><span style={{fontSize:13,fontWeight:500}}>{t.profile.fontSize}:</span>{["S","M","L"].map(s=><button key={s} style={{...S.btn("outline"),padding:"4px 12px",fontSize:12}}>{s}</button>)}</div>
+          <div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}><span style={{fontSize:13,fontWeight:500}}>{t.profile.fontSize}:</span>{["S","M","L"].map(s=><button key={s} style={{...S.btn(fs===s?"primary":"outline"),padding:"4px 12px",fontSize:12}} onClick={()=>onFs(s)}>{s}</button>)}</div>
+          <div style={{marginTop:8,fontSize:12,color:C.textLight}}>{lang==="es"?"Tamaño actual":"Current size"}: {fs} ({fontSizes[fs]}px)</div>
         </div>
         <button style={{...S.btn("outline"),color:C.error,borderColor:C.error,marginTop:8}}>{t.profile.logout}</button>
       </div>;
     }
 
+    const fontSizes = {S:13,M:15,L:18};
+
     function App() {
       const [lang,setLang]=useState("es");
       const [page,setPage]=useState("home");
+      const [fs,setFs]=useState("M");
+      const [consentGranted,setConsentGranted]=useState(true);
       const t=i18n[lang];
       const navItems=[{key:"home",icon:"🏠"},{key:"quote",icon:"📋"},{key:"wallet",icon:"🛡️"},{key:"claims",icon:"⚡"},{key:"profile",icon:"👤"}];
       const nav=useCallback(p=>{setPage(p);window.scrollTo(0,0)},[]);
 
-      return <div>
+      return <div style={{fontSize:fontSizes[fs]}}>
         <a className="skip-link" href="#main-content" onClick={e=>{e.preventDefault();document.getElementById("main-content")?.focus()}}>{t.a11y.skipToContent}</a>
         <header style={S.header} role="banner">
           <div style={{display:"flex",alignItems:"center",gap:12}}><button style={S.logo} onClick={()=>nav("home")} aria-label={t.appName}>{t.appName}</button><span style={{fontSize:11,color:"rgba(255,255,255,0.5)",fontStyle:"italic"}}>Prototype v1.0</span></div>
@@ -346,7 +417,7 @@
           {page==="subscribe"&&<SubscriptionPage t={t} lang={lang} onNav={nav}/>}
           {page==="wallet"&&<WalletPage t={t} lang={lang}/>}
           {page==="claims"&&<ClaimsPage t={t} lang={lang}/>}
-          {page==="profile"&&<ProfilePage t={t} lang={lang} onLang={setLang}/>}
+          {page==="profile"&&<ProfilePage t={t} lang={lang} onLang={setLang} fs={fs} onFs={setFs} consentGranted={consentGranted} onRevoke={()=>setConsentGranted(false)} onGrant={()=>setConsentGranted(true)}/>}
         </main>
         <footer style={S.footer} role="contentinfo">
           <div>© 2026 Solventa — {t.tagline}</div>
