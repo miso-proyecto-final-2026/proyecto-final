@@ -12,6 +12,7 @@
     "listo": "Done"
   },
   "navegacion": {
+    "etiqueta": "Main navigation",
     "inicio": "Home",
     "billetera": "Wallet",
     "notificaciones": "Notifications",
@@ -56,22 +57,40 @@
   },
   "verificacion": {
     "titulo": "Let's verify your identity",
-    "instruccion": "Take a photo of your ID and then a selfie.",
-    "documento": "ID photo",
+    "paso1": "Instructions",
+    "paso2": "Front of your ID",
+    "paso3": "Back of your ID",
+    "paso4": "Selfie",
+    "introduccion": "We'll ask for a photo of your ID and a selfie. It's to confirm it's really you and fully activate your account.",
+    "consejo1": "Find a well-lit spot",
+    "consejo2": "Avoid glare on the document",
+    "consejo3": "Frame the whole document inside the box",
+    "avisoDatos": "These images are only used to validate your identity.",
+    "masTarde": "Do this later",
+    "documentoFrente": "Front of your ID",
+    "documentoReverso": "Back of your ID",
+    "instruccionDocumento": "Center your ID inside the frame and make sure the details are readable.",
+    "capturar": "Capture",
+    "capturado": "Captured",
+    "repetir": "Retake",
     "selfie": "Selfie",
-    "enviar": "Submit verification",
-    "procesando": "We're verifying your details…"
+    "instruccionSelfie": "Look straight ahead and blink slowly.",
+    "detectando": "Detecting…",
+    "procesando": "We're verifying your identity…",
+    "procesandoDetalle": "This can take a few seconds."
   },
   "resultadoVerificacion": {
-    "aprobado": {
-      "titulo": "Identity verified!",
-      "mensaje": "You can now enable biometric access and quote your insurance.",
-      "continuar": "Continue"
-    },
-    "rechazado": {
-      "titulo": "We couldn't verify you",
-      "mensaje": "Make sure your ID is readable and try again.",
-      "reintentar": "Retry"
+    "tituloAprobado": "Identity verified!",
+    "detalleAprobado": "You can now enable biometric access and quote your insurance.",
+    "activarBiometria": "Enable biometric access",
+    "irInicio": "Go to home",
+    "tituloRechazado": "We couldn't verify you",
+    "queHacer": "Check that your ID is readable, find a brighter spot, and avoid glare before trying again.",
+    "reintentar": "Retry verification",
+    "contactarSoporte": "Contact support",
+    "soporteFueraDeAlcance": "Contacting support isn't available in this test version.",
+    "motivo": {
+      "documento_ilegible": "The photo didn't let us read your ID clearly."
     }
   },
   "biometria": {
@@ -110,9 +129,28 @@
     }
   },
   "inicio": {
-    "titulo": "Hi, {nombre}",
-    "verCotizacion": "Quote insurance",
-    "misPolizas": "My policies"
+    "saludo": "Hi, {nombre}",
+    "saludoGenerico": "Hi",
+    "sinConexion": "You're offline: some features aren't available.",
+    "kycPendienteTitulo": "Verify your identity",
+    "kycPendiente": "You can explore and quote insurance freely. To purchase one, you'll need to verify your identity.",
+    "completarKyc": "Verify identity",
+    "kycEnCurso": "We're verifying your identity. We'll let you know as soon as we have a result.",
+    "kycRechazado": "We couldn't verify your identity. You can try again.",
+    "reintentarKyc": "Retry verification",
+    "cotizarTitulo": "Quote insurance",
+    "cotizarDescripcion": "Pick an insurance type and build your quote in minutes.",
+    "polizasTitulo": "My policies",
+    "polizasDescripcion": "Check your active policies and their certificates.",
+    "consentimientoTitulo": "Financial data",
+    "consentimientoActivo": "Authorization active: your offer is personalized.",
+    "consentimientoInactivo": "Authorize the use of your financial data for a personalized offer.",
+    "biometriaTitulo": "Biometric access",
+    "biometriaDescripcion": "Enable sign-in with fingerprint or face.",
+    "biometriaActiva": "Sign-in with fingerprint or face is already on.",
+    "bloqueoSinConexion": "Not available offline.",
+    "bloqueoRequiereKyc": "You need to verify your identity first.",
+    "cerrarSesion": "Sign out"
   },
   "cotizacion": {
     "titulo": "Quote your insurance",

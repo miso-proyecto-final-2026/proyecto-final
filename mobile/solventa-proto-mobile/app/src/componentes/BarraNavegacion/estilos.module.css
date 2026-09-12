@@ -1,2 +1,55 @@
-.contenedor {
+.barra {
+  /* Coherente con --alto-barra de MarcoMovil: BarraNavegacion se monta
+   * dentro de <main> (ver app/routes/app.tsx), asi que esa custom property
+   * si le llega por herencia normal de CSS. */
+  height: var(--alto-barra);
+  flex-shrink: 0;
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--color-superficie);
+  border-top: 1px solid var(--color-borde);
+}
+
+.destino {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-1);
+  color: var(--color-texto-secundario);
+  text-decoration: none;
+  font-family: var(--fuente);
+}
+
+.activo {
+  color: var(--color-primario);
+}
+
+.iconoDestino {
+  position: relative;
+  display: flex;
+}
+
+.etiquetaDestino {
+  font-size: var(--texto-s);
+}
+
+.insignia {
+  position: absolute;
+  top: calc(var(--esp-1) * -1);
+  right: calc(var(--esp-2) * -1);
+  min-width: var(--esp-4);
+  height: var(--esp-4);
+  padding: 0 var(--esp-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radio-l);
+  background: var(--color-error);
+  color: var(--color-superficie);
+  font-family: var(--fuente);
+  font-size: calc(var(--texto-s) * 0.8);
+  font-weight: 700;
+  line-height: 1;
 }

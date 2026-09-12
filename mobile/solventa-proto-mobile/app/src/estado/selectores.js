@@ -22,18 +22,31 @@ export const puedeActivarBiometria = (estado) =>
 export const puedeEntrarConBiometria = (estado) =>
   estado.usuario.biometriaActiva && !estado.usuario.sesionIniciada;
 
-/** H37 requiere identidad verificada. */
-export const puedeCotizar = (estado) =>
-  kycAprobado(estado) && !estado.debug.sinConexion;
+/** H37 es libre: cotizar no requiere identidad verificada. */
+export const puedeCotizar = (estado) => !estado.debug.sinConexion;
 
-/** H17 requiere una cotización lista. */
+/** H17 requiere una cotización lista Y identidad verificada. */
 export const puedeComprar = (estado) =>
   !!estado.cotizacion &&
   estado.cotizacion.estado === ESTADOS_COTIZACION.LISTA &&
-  !estado.debug.sinConexion;
+  !estado.debug.sinConexion &&
+  kycAprobado(estado);
+
+/** No hay verificación aprobada todavía (no iniciada, en curso o rechazada). */
+export const necesitaVerificacion = (estado) =>
+  estado.usuario.estadoKyc !== ESTADOS_KYC.APROBADO;
+
+export const verificacionEnCurso = (estado) =>
+  estado.usuario.estadoKyc === ESTADOS_KYC.EN_PROCESO;
+
+export const verificacionRechazada = (estado) =>
+  estado.usuario.estadoKyc === ESTADOS_KYC.RECHAZADO;
 
 /** Pólizas pendientes de firma (H21). */
 export const polizasSinFirmar = (estado) => estado.polizas.filter((p) => !p.firmada);
+
+/** Mismo selector que polizasSinFirmar, con el nombre que usan las pantallas nuevas. */
+export const polizasPendientesFirma = polizasSinFirmar;
 
 export const notificacionesNoLeidas = (estado) =>
   estado.notificaciones.filter((n) => !n.leida);

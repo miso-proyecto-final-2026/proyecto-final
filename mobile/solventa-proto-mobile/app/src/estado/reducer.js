@@ -54,6 +54,7 @@ export function reducer(estado, accion) {
           ...estado.usuario,
           ...accion.datos,
           estadoKyc: ESTADOS_KYC.NO_INICIADO,
+          sesionIniciada: true, // Registrarse abre sesion; el KYC es un paso aparte.
         },
       };
 
@@ -169,9 +170,8 @@ export function reducer(estado, accion) {
     // H37 · Solicitar cotización desde el móvil
     // =====================================================================
     case ACCIONES.SOLICITAR_COTIZACION:
-      if (estado.usuario.estadoKyc !== ESTADOS_KYC.APROBADO) {
-        return bloquear(estado, 'H37 requiere KYC aprobado.');
-      }
+      // Cotizar es libre: no requiere identidad verificada. Solo comprar
+      // (H17, mas abajo) la exige.
       return {
         ...estado,
         cotizacion: {
@@ -224,6 +224,9 @@ export function reducer(estado, accion) {
       const cot = estado.cotizacion;
       if (!cot || cot.estado !== ESTADOS_COTIZACION.LISTA) {
         return bloquear(estado, 'H17 requiere una cotización lista (H37).');
+      }
+      if (estado.usuario.estadoKyc !== ESTADOS_KYC.APROBADO) {
+        return bloquear(estado, 'H17 requiere identidad verificada (H02).');
       }
       const poliza = {
         id: nuevoId('pol'),

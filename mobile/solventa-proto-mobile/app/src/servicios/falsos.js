@@ -24,3 +24,18 @@ export async function autenticar(debug) {
   await esperar(debug.latenciaMs);
   return { ok: true };
 }
+
+/**
+ * Simula la verificacion de identidad (H02): documento + selfie.
+ *
+ * Es a proposito el paso mas lento del flujo: espera el doble de
+ * debug.latenciaMs. debug.sinConexion simula una falla de red (se puede
+ * reintentar sin perder el KYC); debug.forzarFalloKyc simula un documento
+ * ilegible (falla real del KYC).
+ */
+export async function verificarIdentidad(debug) {
+  await esperar(debug.latenciaMs * 2);
+  if (debug.sinConexion) return { ok: false, motivo: 'sin_conexion' };
+  if (debug.forzarFalloKyc) return { ok: false, motivo: 'documento_ilegible' };
+  return { ok: true };
+}

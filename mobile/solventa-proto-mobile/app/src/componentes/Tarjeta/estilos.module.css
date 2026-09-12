@@ -1,0 +1,79 @@
+.tarjeta {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  width: 100%;
+  /* Bien por encima de var(--alto-tactil): hay icono + titulo + descripcion
+   * (y a veces un motivo de bloqueo), no es un boton simple. */
+  min-height: calc(var(--alto-tactil) * 1.8);
+  padding: var(--esp-4);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+  background: var(--color-superficie);
+  box-shadow: 0 1px var(--esp-1) color-mix(in srgb, var(--color-texto) 8%, transparent);
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--fuente);
+}
+
+.tarjeta:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.iconoContenedor {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--alto-tactil) * 0.9);
+  height: calc(var(--alto-tactil) * 0.9);
+  border-radius: 50%;
+  background: var(--color-primario-suave);
+  color: var(--color-primario);
+}
+
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+
+.titulo {
+  color: var(--color-texto);
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.descripcion {
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-s);
+}
+
+/* Nunca solo un title/tooltip: el motivo del bloqueo es texto visible,
+ * enlazado al boton con aria-describedby. */
+.motivoBloqueo {
+  color: var(--color-error);
+  font-size: var(--texto-s);
+  font-weight: 600;
+}
+
+.insignia {
+  position: absolute;
+  top: var(--esp-2);
+  right: var(--esp-2);
+  min-width: var(--esp-5);
+  height: var(--esp-5);
+  padding: 0 var(--esp-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radio-l);
+  background: var(--color-error);
+  color: var(--color-superficie);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+  font-weight: 700;
+}

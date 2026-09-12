@@ -12,6 +12,7 @@
     "listo": "Listo"
   },
   "navegacion": {
+    "etiqueta": "Navegación principal",
     "inicio": "Inicio",
     "billetera": "Billetera",
     "notificaciones": "Notificaciones",
@@ -56,22 +57,40 @@
   },
   "verificacion": {
     "titulo": "Verifiquemos tu identidad",
-    "instruccion": "Toma una foto de tu documento y luego una selfie.",
-    "documento": "Foto del documento",
+    "paso1": "Instrucciones",
+    "paso2": "Frente del documento",
+    "paso3": "Reverso del documento",
+    "paso4": "Selfie",
+    "introduccion": "Te vamos a pedir una foto de tu documento y una selfie. Es para confirmar que sos vos y activar tu cuenta por completo.",
+    "consejo1": "Buscá un lugar con buena luz",
+    "consejo2": "Evitá reflejos sobre el documento",
+    "consejo3": "Encuadrá el documento completo dentro del marco",
+    "avisoDatos": "Estas imágenes se usan solo para validar tu identidad.",
+    "masTarde": "Hacerlo más tarde",
+    "documentoFrente": "Frente del documento",
+    "documentoReverso": "Reverso del documento",
+    "instruccionDocumento": "Centrá el documento dentro del marco y asegurate de que se lean bien los datos.",
+    "capturar": "Capturar",
+    "capturado": "Capturado",
+    "repetir": "Repetir",
     "selfie": "Selfie",
-    "enviar": "Enviar verificación",
-    "procesando": "Estamos verificando tus datos…"
+    "instruccionSelfie": "Mirá al frente y parpadeá lentamente.",
+    "detectando": "Detectando…",
+    "procesando": "Estamos verificando tu identidad…",
+    "procesandoDetalle": "Esto puede tardar unos segundos."
   },
   "resultadoVerificacion": {
-    "aprobado": {
-      "titulo": "¡Identidad verificada!",
-      "mensaje": "Ya puedes activar el acceso biométrico y cotizar tus seguros.",
-      "continuar": "Continuar"
-    },
-    "rechazado": {
-      "titulo": "No pudimos verificarte",
-      "mensaje": "Revisa que el documento sea legible y vuelve a intentarlo.",
-      "reintentar": "Reintentar"
+    "tituloAprobado": "¡Identidad verificada!",
+    "detalleAprobado": "Ya podés activar el acceso biométrico y cotizar tus seguros.",
+    "activarBiometria": "Activar acceso biométrico",
+    "irInicio": "Ir al inicio",
+    "tituloRechazado": "No pudimos verificarte",
+    "queHacer": "Revisá que el documento sea legible, buscá un lugar con más luz y evitá reflejos antes de volver a intentarlo.",
+    "reintentar": "Reintentar verificación",
+    "contactarSoporte": "Contactar a soporte",
+    "soporteFueraDeAlcance": "El contacto con soporte no está disponible en esta versión de prueba.",
+    "motivo": {
+      "documento_ilegible": "La foto no permitió leer bien tu documento."
     }
   },
   "biometria": {
@@ -110,9 +129,28 @@
     }
   },
   "inicio": {
-    "titulo": "Hola, {nombre}",
-    "verCotizacion": "Cotizar un seguro",
-    "misPolizas": "Mis pólizas"
+    "saludo": "Hola, {nombre}",
+    "saludoGenerico": "Hola",
+    "sinConexion": "Estás sin conexión: algunas funciones no están disponibles.",
+    "kycPendienteTitulo": "Verifica tu identidad",
+    "kycPendiente": "Puedes explorar y cotizar seguros libremente. Para contratar uno, vas a necesitar verificar tu identidad.",
+    "completarKyc": "Verificar identidad",
+    "kycEnCurso": "Estamos verificando tu identidad. Te avisamos apenas tengamos el resultado.",
+    "kycRechazado": "No pudimos verificar tu identidad. Puedes intentarlo de nuevo.",
+    "reintentarKyc": "Reintentar verificación",
+    "cotizarTitulo": "Cotizar un seguro",
+    "cotizarDescripcion": "Elige un seguro y arma tu cotización en minutos.",
+    "polizasTitulo": "Mis pólizas",
+    "polizasDescripcion": "Consulta tus pólizas activas y sus certificados.",
+    "consentimientoTitulo": "Datos financieros",
+    "consentimientoActivo": "Autorización activa: tu oferta está personalizada.",
+    "consentimientoInactivo": "Autoriza el uso de tus datos financieros para una oferta personalizada.",
+    "biometriaTitulo": "Acceso biométrico",
+    "biometriaDescripcion": "Activa el ingreso con huella o rostro.",
+    "biometriaActiva": "El ingreso con huella o rostro ya está activo.",
+    "bloqueoSinConexion": "No disponible sin conexión.",
+    "bloqueoRequiereKyc": "Necesitas verificar tu identidad primero.",
+    "cerrarSesion": "Cerrar sesión"
   },
   "cotizacion": {
     "titulo": "Cotiza tu seguro",
