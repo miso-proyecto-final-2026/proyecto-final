@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solventa — Prototipo Web</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #F7F9FB; color: #1A2B3C; }
+    #root { min-height: 100vh; }
+    :focus-visible { outline: 3px solid #1A9B8C; outline-offset: 2px; }
+    .skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; z-index: 1000; background: #0F2B46; color: #fff; padding: 8px 16px; font-size: 14px; text-decoration: none; border-radius: 0 0 4px 0; }
+    .skip-link:focus { left: 0; top: 0; width: auto; height: auto; }
+    button { cursor: pointer; font-family: inherit; }
+    select, input, textarea { font-family: inherit; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useCallback } = React;
+
+    // ── i18n ──
+    const i18n = {
+      es: {
+        appName:"Solventa", tagline:"Seguros inteligentes sobre Open Finance",
+        nav:{home:"Inicio",quote:"Cotizar",wallet:"Mis Pólizas",claims:"Siniestros",profile:"Perfil"},
+        home:{
+          hero:"Protege lo que importa",
+          heroSub:"Cotiza tu seguro de vida hipotecario en segundos, con la mejor prima personalizada gracias a Open Finance.",
+          cta:"Cotizar ahora",
+          features:[
+            {title:"Cotización instantánea",desc:"Obtén tu prima personalizada en menos de 3 segundos, usando tus datos financieros con tu consentimiento."},
+            {title:"100% digital",desc:"Desde la cotización hasta el pago, todo desde tu celular o computador. Sin papeleos."},
+            {title:"Siniestro automático",desc:"Eventos paramétricos procesados automáticamente. Recibe tu indemnización sin trámites."}
+          ],
+          partners:"Integración con socios distribuidores",
+          partnersDesc:"Fintechs, bancos y comercios pueden integrar nuestros seguros directamente en sus flujos de venta."
+        },
+        quote:{
+          title:"Cotiza tu seguro",step1:"Datos del inmueble",step2:"Consentimiento Open Finance",step3:"Tu cotización personalizada",
+          propertyValue:"Valor del inmueble",propertyCity:"Ciudad del inmueble",loanTerm:"Plazo del crédito",years:"años",
+          consent:"Autorizo a Solventa a consultar mis datos financieros a través de Open Finance para personalizar mi cotización.",
+          consentDetail:"Puedes revocar este consentimiento en cualquier momento desde tu perfil.",
+          authorize:"Autorizar consulta",authorized:"✓ Datos financieros consultados exitosamente",
+          generating:"Generando cotización personalizada...",result:"Tu cotización",monthlyPremium:"Prima mensual",
+          coverage:"Cobertura",coverageItems:["Vida hipotecario","Incendio y terremoto","Desempleo involuntario"],
+          validUntil:"Válida hasta",subscribe:"Suscribir póliza",newQuote:"Nueva cotización",back:"Volver",next:"Siguiente"
+        },
+        subscription:{
+          title:"Suscripción de póliza",step1:"Verificación de identidad",step2:"Método de pago",step3:"Firma electrónica",step4:"Póliza emitida",
+          verifying:"Verificando identidad con KYC biométrico...",verified:"✓ Identidad verificada",
+          cardNumber:"Número de tarjeta",cardHolder:"Nombre del titular",expiry:"Vencimiento",cvv:"CVV",
+          tokenNote:"Tu tarjeta será tokenizada. Solventa nunca almacena el número completo.",
+          pay:"Pagar prima",processing:"Procesando cobro...",paid:"✓ Cobro procesado exitosamente",
+          signDoc:"Firmar contrato electrónicamente",signing:"Generando firma electrónica...",signed:"✓ Contrato firmado",
+          policyTitle:"¡Póliza emitida!",policyNumber:"Número de póliza",downloadPolicy:"Descargar póliza",goToWallet:"Ir a Mis Pólizas"
+        },
+        wallet:{
+          title:"Mis Pólizas",active:"Activas",expired:"Vencidas",empty:"No tienes pólizas activas. ¡Cotiza tu primera póliza!",
+          policyNumber:"Póliza",product:"Producto",premium:"Prima mensual",status:"Estado",
+          validFrom:"Vigencia desde",validTo:"Vigencia hasta",coverage:"Cobertura",viewDetails:"Ver detalles",
+          statuses:{active:"Activa",pending:"Pendiente",expired:"Vencida"}
+        },
+        claims:{
+          title:"Siniestros",parametric:"Eventos paramétricos",manual:"Reportar siniestro",
+          noEvents:"No hay eventos paramétricos registrados.",eventType:"Tipo de evento",eventDate:"Fecha del evento",
+          amount:"Indemnización",eventStatus:"Estado",automatic:"Pago automático",paid:"Pagado",pending:"En proceso",
+          report:"Reportar siniestro",reportDesc:"Si has sufrido un siniestro cubierto por tu póliza, inicia el reporte aquí.",
+          selectPolicy:"Seleccionar póliza",description:"Descripción del siniestro",attachEvidence:"Adjuntar evidencia",submit:"Enviar reporte"
+        },
+        profile:{
+          title:"Mi Perfil",personalInfo:"Información personal",name:"Nombre",document:"Documento",
+          email:"Correo electrónico",phone:"Teléfono",consents:"Consentimientos Open Finance",
+          consentStatus:"Estado",granted:"Otorgado",revokeConsent:"Revocar",language:"Idioma",
+          accessibility:"Accesibilidad",highContrast:"Alto contraste",fontSize:"Tamaño de fuente",logout:"Cerrar sesión"
+        },
+        a11y:{skipToContent:"Ir al contenido principal",langToggle:"Cambiar idioma"},
+        dateLocale:"es-CO"
+      },
+      en: {
+        appName:"Solventa", tagline:"Smart insurance powered by Open Finance",
+        nav:{home:"Home",quote:"Quote",wallet:"My Policies",claims:"Claims",profile:"Profile"},
+        home:{
+          hero:"Protect what matters",
+          heroSub:"Get your personalized mortgage life insurance quote in seconds, with the best premium thanks to Open Finance.",
+          cta:"Get a quote",
+          features:[
+            {title:"Instant quote",desc:"Get your personalized premium in under 3 seconds, using your financial data with your consent."},
+            {title:"100% digital",desc:"From quote to payment, everything from your phone or computer. No paperwork."},
+            {title:"Automatic claims",desc:"Parametric events processed automatically. Receive your compensation hassle-free."}
+          ],
+          partners:"Distribution partner integration",
+          partnersDesc:"Fintechs, banks, and retailers can integrate our insurance directly into their sales flows."
+        },
+        quote:{
+          title:"Get your quote",step1:"Property details",step2:"Open Finance consent",step3:"Your personalized quote",
+          propertyValue:"Property value",propertyCity:"Property city",loanTerm:"Loan term",years:"years",
+          consent:"I authorize Solventa to access my financial data through Open Finance to personalize my quote.",
+          consentDetail:"You can revoke this consent at any time from your profile.",
+          authorize:"Authorize access",authorized:"✓ Financial data retrieved successfully",
+          generating:"Generating personalized quote...",result:"Your quote",monthlyPremium:"Monthly premium",
+          coverage:"Coverage",coverageItems:["Mortgage life","Fire and earthquake","Involuntary unemployment"],
+          validUntil:"Valid until",subscribe:"Subscribe policy",newQuote:"New quote",back:"Back",next:"Next"
+        },
+        subscription:{
+          title:"Policy subscription",step1:"Identity verification",step2:"Payment method",step3:"Electronic signature",step4:"Policy issued",
+          verifying:"Verifying identity with biometric KYC...",verified:"✓ Identity verified",
+          cardNumber:"Card number",cardHolder:"Cardholder name",expiry:"Expiry",cvv:"CVV",
+          tokenNote:"Your card will be tokenized. Solventa never stores the full number.",
+          pay:"Pay premium",processing:"Processing payment...",paid:"✓ Payment processed successfully",
+          signDoc:"Sign contract electronically",signing:"Generating electronic signature...",signed:"✓ Contract signed",
+          policyTitle:"Policy issued!",policyNumber:"Policy number",downloadPolicy:"Download policy",goToWallet:"Go to My Policies"
+        },
+        wallet:{
+          title:"My Policies",active:"Active",expired:"Expired",empty:"You don't have active policies. Get your first quote!",
+          policyNumber:"Policy",product:"Product",premium:"Monthly premium",status:"Status",
+          validFrom:"Valid from",validTo:"Valid to",coverage:"Coverage",viewDetails:"View details",
+          statuses:{active:"Active",pending:"Pending",expired:"Expired"}
+        },
+        claims:{
+          title:"Claims",parametric:"Parametric events",manual:"Report a claim",
+          noEvents:"No parametric events recorded.",eventType:"Event type",eventDate:"Event date",
+          amount:"Compensation",eventStatus:"Status",automatic:"Automatic payment",paid:"Paid",pending:"In progress",
+          report:"Report a claim",reportDesc:"If you've experienced a covered event, start your report here.",
+          selectPolicy:"Select policy",description:"Claim description",attachEvidence:"Attach evidence",submit:"Submit report"
+        },
+        profile:{
+          title:"My Profile",personalInfo:"Personal information",name:"Name",document:"Document",
+          email:"Email",phone:"Phone",consents:"Open Finance consents",
+          consentStatus:"Status",granted:"Granted",revokeConsent:"Revoke",language:"Language",
+          accessibility:"Accessibility",highContrast:"High contrast",fontSize:"Font size",logout:"Log out"
+        },
+        a11y:{skipToContent:"Skip to main content",langToggle:"Switch language"},
+        dateLocale:"en-US"
+      }
+    };
+
+    const formatCOP = (n) => new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(n);
+    const formatDate = (d,locale) => new Intl.DateTimeFormat(locale,{day:"2-digit",month:"2-digit",year:"numeric"}).format(d);
+
+    const mockPolicies = [
+      {id:"SOL-2026-001847",product:"Vida Hipotecario",productEn:"Mortgage Life",premium:187400,status:"active",from:new Date(2026,2,15),to:new Date(2046,2,15),coverage:380000000},
+      {id:"SOL-2026-002341",product:"Incendio y Terremoto",productEn:"Fire & Earthquake",premium:94200,status:"active",from:new Date(2026,5,1),to:new Date(2027,5,1),coverage:420000000}
+    ];
+    const mockEvents = [
+      {type:"Sismo Mw 5.2",typeEn:"Earthquake Mw 5.2",date:new Date(2026,7,3),amount:12500000,status:"paid"},
+      {type:"Inundación Nivel 3",typeEn:"Flood Level 3",date:new Date(2026,8,18),amount:8700000,status:"pending"}
+    ];
+
+    const C = {navy:"#0F2B46",accent:"#1A9B8C",accentLight:"#E8F6F4",bg:"#F7F9FB",white:"#FFFFFF",text:"#1A2B3C",textLight:"#5A6B7C",border:"#DDE3EA",success:"#0D8050",successBg:"#E6F4ED",warn:"#C87D2F",warnBg:"#FFF4E5",error:"#C02B2B"};
+
+    const S = {
+      header:{background:C.navy,color:C.white,padding:"0 24px",display:"flex",alignItems:"center",justifyContent:"space-between",height:56,position:"sticky",top:0,zIndex:100},
+      logo:{fontSize:20,fontWeight:700,letterSpacing:"-0.3px",cursor:"pointer",background:"none",border:"none",color:"inherit"},
+      nav:{display:"flex",gap:4,alignItems:"center",flexWrap:"wrap"},
+      navBtn:(a)=>({background:a?"rgba(26,155,140,0.2)":"transparent",color:a?C.accentLight:"rgba(255,255,255,0.75)",border:"none",padding:"8px 14px",borderRadius:6,fontSize:13,fontWeight:a?600:400,transition:"all 0.15s"}),
+      langBtn:{background:"rgba(255,255,255,0.12)",border:"1px solid rgba(255,255,255,0.2)",color:C.white,padding:"4px 10px",borderRadius:4,fontSize:12,fontWeight:600},
+      main:{maxWidth:960,margin:"0 auto",padding:"24px 20px 60px"},
+      card:{background:C.white,borderRadius:10,border:`1px solid ${C.border}`,padding:24,marginBottom:16,boxShadow:"0 1px 3px rgba(15,43,70,0.08)"},
+      h1:{fontSize:26,fontWeight:700,color:C.navy,margin:"0 0 6px"},
+      h2:{fontSize:19,fontWeight:600,color:C.navy,margin:"0 0 12px"},
+      h3:{fontSize:16,fontWeight:600,color:C.text,margin:"0 0 8px"},
+      sub:{fontSize:14,color:C.textLight,margin:"0 0 20px",lineHeight:1.5},
+      btn:(v="primary")=>({background:v==="primary"?C.accent:v==="outline"?"transparent":C.white,color:v==="primary"?C.white:C.accent,border:v==="outline"?`1.5px solid ${C.accent}`:"none",padding:"10px 22px",borderRadius:7,fontSize:14,fontWeight:600,transition:"all 0.15s",display:"inline-flex",alignItems:"center",gap:6}),
+      input:{width:"100%",padding:"10px 12px",border:`1px solid ${C.border}`,borderRadius:6,fontSize:14,boxSizing:"border-box",outline:"none"},
+      label:{display:"block",fontSize:13,fontWeight:500,color:C.textLight,marginBottom:4},
+      badge:(t)=>({display:"inline-block",padding:"3px 10px",borderRadius:12,fontSize:12,fontWeight:600,background:t==="active"||t==="paid"?C.successBg:t==="pending"?C.warnBg:C.bg,color:t==="active"||t==="paid"?C.success:t==="pending"?C.warn:C.textLight}),
+      stepper:{display:"flex",gap:0,marginBottom:24},
+      stepItem:(a,d)=>({flex:1,textAlign:"center",padding:"10px 8px",fontSize:12,fontWeight:600,borderBottom:`3px solid ${a?C.accent:d?C.success:C.border}`,color:a?C.accent:d?C.success:C.textLight,transition:"all 0.2s"}),
+      grid:{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(260px, 1fr))",gap:16},
+      tag:{display:"inline-block",background:C.accentLight,color:C.accent,padding:"2px 8px",borderRadius:4,fontSize:11,fontWeight:600,marginRight:4},
+      footer:{textAlign:"center",padding:20,fontSize:12,color:C.textLight,borderTop:`1px solid ${C.border}`,marginTop:40}
+    };
+
+    function Stepper({steps,current}) {
+      return <div style={S.stepper} role="navigation" aria-label="Pasos">{steps.map((s,i)=>
+        <div key={i} style={S.stepItem(i===current,i<current)} aria-current={i===current?"step":undefined}>{i<current?"✓ ":""}{s}</div>
+      )}</div>;
+    }
+
+    function HomePage({t,onNav}) {
+      return <div>
+        <div style={{...S.card,background:`linear-gradient(135deg,${C.navy} 0%,#1A4A6B 100%)`,color:C.white,padding:"48px 32px",textAlign:"center",border:"none"}}>
+          <h1 style={{fontSize:32,fontWeight:700,margin:"0 0 12px",color:C.white}}>{t.home.hero}</h1>
+          <p style={{fontSize:16,color:"rgba(255,255,255,0.8)",margin:"0 0 28px",maxWidth:520,marginLeft:"auto",marginRight:"auto",lineHeight:1.6}}>{t.home.heroSub}</p>
+          <button style={{...S.btn(),padding:"14px 32px",fontSize:16}} onClick={()=>onNav("quote")}>{t.home.cta}</button>
+        </div>
+        <div style={{...S.grid,marginTop:24}}>
+          {t.home.features.map((f,i)=><div key={i} style={S.card}>
+            <div style={{width:40,height:40,borderRadius:8,background:C.accentLight,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:12,fontSize:20}}>{["⚡","📱","🔄"][i]}</div>
+            <h3 style={S.h3}>{f.title}</h3>
+            <p style={{fontSize:13,color:C.textLight,margin:0,lineHeight:1.5}}>{f.desc}</p>
+          </div>)}
+        </div>
+        <div style={{...S.card,marginTop:24,textAlign:"center"}}>
+          <h2 style={S.h2}>{t.home.partners}</h2>
+          <p style={{fontSize:14,color:C.textLight,margin:0,lineHeight:1.5}}>{t.home.partnersDesc}</p>
+          <div style={{display:"flex",justifyContent:"center",gap:24,marginTop:20,flexWrap:"wrap"}}>
+            {["Fintech A","Banco B","Comercio C"].map((p,i)=><div key={i} style={{padding:"10px 20px",borderRadius:8,background:C.bg,fontSize:13,fontWeight:500,color:C.textLight}}>{p}</div>)}
+          </div>
+        </div>
+      </div>;
+    }
+
+    function QuotePage({t,lang,onNav}) {
+      const [step,setStep]=useState(0);
+      const [consented,setConsented]=useState(false);
+      const [loading,setLoading]=useState(false);
+      const [form,setForm]=useState({value:"380000000",city:"Bogotá",term:"20"});
+      const steps=[t.quote.step1,t.quote.step2,t.quote.step3];
+      const doConsent=()=>{setLoading(true);setTimeout(()=>{setConsented(true);setLoading(false)},1500)};
+      const doGenerate=()=>{setLoading(true);setTimeout(()=>{setLoading(false);setStep(2)},2000)};
+
+      return <div>
+        <h1 style={S.h1}>{t.quote.title}</h1><p style={S.sub}>{t.tagline}</p>
+        <Stepper steps={steps} current={step}/>
+        <div style={S.card}>
+          {step===0&&<div>
+            <div style={{display:"grid",gap:16}}>
+              <div><label style={S.label} htmlFor="pv">{t.quote.propertyValue}</label><input id="pv" style={S.input} value={formatCOP(parseInt(form.value)||0)} onChange={e=>setForm({...form,value:e.target.value.replace(/\D/g,"")})}/><span style={{fontSize:11,color:C.textLight}}>COP</span></div>
+              <div><label style={S.label} htmlFor="pc">{t.quote.propertyCity}</label><select id="pc" style={S.input} value={form.city} onChange={e=>setForm({...form,city:e.target.value})}>{["Bogotá","Medellín","Cali","Barranquilla","Cartagena","Bucaramanga"].map(c=><option key={c}>{c}</option>)}</select></div>
+              <div><label style={S.label} htmlFor="lt">{t.quote.loanTerm}</label><div style={{display:"flex",alignItems:"center",gap:8}}><input id="lt" type="range" min="5" max="30" value={form.term} onChange={e=>setForm({...form,term:e.target.value})} style={{flex:1}}/><span style={{fontSize:14,fontWeight:600,minWidth:60}}>{form.term} {t.quote.years}</span></div></div>
+            </div>
+            <div style={{marginTop:24,textAlign:"right"}}><button style={S.btn()} onClick={()=>setStep(1)}>{t.quote.next} →</button></div>
+          </div>}
+          {step===1&&<div>
+            <div style={{padding:20,background:C.bg,borderRadius:8,marginBottom:16}}><p style={{margin:"0 0 8px",fontSize:14,lineHeight:1.5}}>{t.quote.consent}</p><p style={{margin:0,fontSize:12,color:C.textLight}}>{t.quote.consentDetail}</p></div>
+            {consented?<div style={{padding:12,background:C.successBg,borderRadius:6,color:C.success,fontSize:14,fontWeight:500}} role="status">{t.quote.authorized}</div>
+            :loading?<div style={{padding:12,textAlign:"center",color:C.textLight,fontSize:14}} role="status" aria-live="polite">⏳ {t.quote.generating}</div>
+            :<button style={S.btn()} onClick={doConsent}>{t.quote.authorize}</button>}
+            <div style={{marginTop:24,display:"flex",justifyContent:"space-between"}}><button style={S.btn("outline")} onClick={()=>setStep(0)}>← {t.quote.back}</button>{consented&&<button style={S.btn()} onClick={doGenerate}>{t.quote.next} →</button>}</div>
+          </div>}
+          {step===2&&<div>
+            <div style={{textAlign:"center",marginBottom:24}}><h2 style={{...S.h2,fontSize:22}}>{t.quote.result}</h2><div style={{fontSize:38,fontWeight:700,color:C.accent}}>{formatCOP(187400)}</div><div style={{fontSize:14,color:C.textLight}}>{t.quote.monthlyPremium}</div></div>
+            <div style={{padding:16,background:C.bg,borderRadius:8,marginBottom:16}}><h3 style={S.h3}>{t.quote.coverage}</h3>{t.quote.coverageItems.map((c,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 0",fontSize:14}}><span style={{color:C.success}}>✓</span> {c}</div>)}</div>
+            <div style={{fontSize:13,color:C.textLight,marginBottom:20}}>{t.quote.validUntil}: {formatDate(new Date(2026,9,11),t.dateLocale)}</div>
+            <div style={{display:"flex",gap:12,flexWrap:"wrap"}}><button style={S.btn()} onClick={()=>onNav("subscribe")}>{t.quote.subscribe}</button><button style={S.btn("outline")} onClick={()=>{setStep(0);setConsented(false)}}>{t.quote.newQuote}</button></div>
+          </div>}
+        </div>
+      </div>;
+    }
+
+    function SubscriptionPage({t,lang,onNav}) {
+      const [step,setStep]=useState(0);const [loading,setLoading]=useState(false);
+      const steps=[t.subscription.step1,t.subscription.step2,t.subscription.step3,t.subscription.step4];
+      const advance=(d=1800)=>{setLoading(true);setTimeout(()=>{setLoading(false);setStep(s=>s+1)},d)};
+      return <div>
+        <h1 style={S.h1}>{t.subscription.title}</h1><p style={S.sub}>{t.tagline}</p>
+        <Stepper steps={steps} current={step}/>
+        <div style={S.card}>
+          {step===0&&<div style={{textAlign:"center"}}>{loading?<div role="status" aria-live="polite" style={{padding:40,color:C.textLight}}>⏳ {t.subscription.verifying}</div>:<div><div style={{fontSize:48,marginBottom:12}}>🔐</div><p style={{fontSize:14,color:C.textLight,marginBottom:20}}>{t.subscription.step1}</p><button style={S.btn()} onClick={()=>advance(2000)}>{t.subscription.step1}</button></div>}</div>}
+          {step===1&&<div>
+            <div style={{display:"grid",gap:14}}><div><label style={S.label} htmlFor="cn">{t.subscription.cardNumber}</label><input id="cn" style={S.input} placeholder="4242 4242 4242 4242"/></div><div><label style={S.label} htmlFor="ch">{t.subscription.cardHolder}</label><input id="ch" style={S.input} placeholder="STIVEN CARDONA"/></div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}><div><label style={S.label} htmlFor="ex">{t.subscription.expiry}</label><input id="ex" style={S.input} placeholder="12/28"/></div><div><label style={S.label} htmlFor="cv">{t.subscription.cvv}</label><input id="cv" style={S.input} placeholder="***" type="password"/></div></div></div>
+            <div style={{marginTop:12,padding:10,background:C.warnBg,borderRadius:6,fontSize:12,color:C.warn}}>🔒 {t.subscription.tokenNote}</div>
+            <div style={{marginTop:20}}>{loading?<div role="status" aria-live="polite" style={{color:C.textLight,fontSize:14}}>⏳ {t.subscription.processing}</div>:<button style={S.btn()} onClick={()=>advance()}>{t.subscription.pay} — {formatCOP(187400)}</button>}</div>
+          </div>}
+          {step===2&&<div style={{textAlign:"center"}}>{loading?<div role="status" aria-live="polite" style={{padding:40,color:C.textLight}}>⏳ {t.subscription.signing}</div>:<div><div style={{fontSize:48,marginBottom:12}}>✍️</div><p style={{fontSize:14,color:C.textLight,marginBottom:20}}>{t.subscription.step3}</p><button style={S.btn()} onClick={()=>advance(1500)}>{t.subscription.signDoc}</button></div>}</div>}
+          {step===3&&<div style={{textAlign:"center"}}><div style={{fontSize:48,marginBottom:8}}>🎉</div><h2 style={{...S.h2,color:C.success}}>{t.subscription.policyTitle}</h2><div style={{padding:16,background:C.successBg,borderRadius:8,marginBottom:20,display:"inline-block"}}><div style={{fontSize:12,color:C.success}}>{t.subscription.policyNumber}</div><div style={{fontSize:18,fontWeight:700,color:C.success}}>SOL-2026-003192</div></div><div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}><button style={S.btn("outline")}>{t.subscription.downloadPolicy}</button><button style={S.btn()} onClick={()=>onNav("wallet")}>{t.subscription.goToWallet}</button></div></div>}
+        </div>
+      </div>;
+    }
+
+    function WalletPage({t,lang}) {
+      const [tab,setTab]=useState("active");const [expanded,setExpanded]=useState(null);
+      const policies=tab==="active"?mockPolicies:[];
+      return <div>
+        <h1 style={S.h1}>{t.wallet.title}</h1><p style={S.sub}>{mockPolicies.length} {t.wallet.active.toLowerCase()}</p>
+        <div style={{display:"flex",gap:8,marginBottom:20}}>{["active","expired"].map(tb=><button key={tb} style={{...S.btn(tab===tb?"primary":"outline"),fontSize:13,padding:"7px 16px"}} onClick={()=>setTab(tb)}>{t.wallet[tb]}</button>)}</div>
+        {policies.length===0?<div style={{...S.card,textAlign:"center",padding:40,color:C.textLight}}>{t.wallet.empty}</div>
+        :policies.map((p,i)=><div key={i} style={S.card} role="article" aria-label={`${t.wallet.policyNumber} ${p.id}`}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8}}><div><div style={{fontSize:12,color:C.textLight}}>{t.wallet.policyNumber}</div><div style={{fontSize:16,fontWeight:600}}>{p.id}</div></div><span style={S.badge(p.status)}>{t.wallet.statuses[p.status]}</span></div>
+          <div style={{marginTop:12,display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(140px, 1fr))",gap:12}}>
+            <div><span style={{fontSize:12,color:C.textLight}}>{t.wallet.product}</span><div style={{fontSize:14,fontWeight:500}}>{lang==="es"?p.product:p.productEn}</div></div>
+            <div><span style={{fontSize:12,color:C.textLight}}>{t.wallet.premium}</span><div style={{fontSize:14,fontWeight:600,color:C.accent}}>{formatCOP(p.premium)}</div></div>
+            <div><span style={{fontSize:12,color:C.textLight}}>{t.wallet.coverage}</span><div style={{fontSize:14,fontWeight:500}}>{formatCOP(p.coverage)}</div></div>
+          </div>
+          {expanded===i&&<div style={{marginTop:12,padding:12,background:C.bg,borderRadius:6,fontSize:13}}><div style={{display:"flex",gap:24,flexWrap:"wrap"}}><span>{t.wallet.validFrom}: {formatDate(p.from,t.dateLocale)}</span><span>{t.wallet.validTo}: {formatDate(p.to,t.dateLocale)}</span></div></div>}
+          <button style={{...S.btn("outline"),marginTop:12,fontSize:12,padding:"6px 14px"}} onClick={()=>setExpanded(expanded===i?null:i)} aria-expanded={expanded===i}>{t.wallet.viewDetails}</button>
+        </div>)}
+      </div>;
+    }
+
+    function ClaimsPage({t,lang}) {
+      const [tab,setTab]=useState("parametric");
+      const [claimState,setClaimState]=useState("form"); // form | submitting | submitted
+      const [claimDesc,setClaimDesc]=useState("");
+      const [fileName,setFileName]=useState("");
+      const [descError,setDescError]=useState(false);
+
+      const handleSubmit=()=>{
+        if(!claimDesc.trim()){setDescError(true);return}
+        setDescError(false);setClaimState("submitting");
+        setTimeout(()=>setClaimState("submitted"),2000);
+      };
+      const handleNewClaim=()=>{setClaimState("form");setClaimDesc("");setFileName("");setDescError(false)};
+      const handleFile=()=>{setFileName(lang==="es"?"foto_dano_cocina.jpg":"kitchen_damage_photo.jpg")};
+
+      return <div>
+        <h1 style={S.h1}>{t.claims.title}</h1><p style={S.sub}>{t.tagline}</p>
+        <div style={{display:"flex",gap:8,marginBottom:20}}><button style={{...S.btn(tab==="parametric"?"primary":"outline"),fontSize:13,padding:"7px 16px"}} onClick={()=>{setTab("parametric");handleNewClaim()}}>{t.claims.parametric}</button><button style={{...S.btn(tab==="manual"?"primary":"outline"),fontSize:13,padding:"7px 16px"}} onClick={()=>setTab("manual")}>{t.claims.manual}</button></div>
+        {tab==="parametric"?<div>{mockEvents.map((e,i)=><div key={i} style={S.card} role="article">
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8}}><div><span style={S.tag}>{t.claims.automatic}</span><h3 style={{...S.h3,marginTop:8}}>{lang==="es"?e.type:e.typeEn}</h3></div><span style={S.badge(e.status)}>{e.status==="paid"?t.claims.paid:t.claims.pending}</span></div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginTop:12}}><div><span style={{fontSize:12,color:C.textLight}}>{t.claims.eventDate}</span><div style={{fontSize:14}}>{formatDate(e.date,t.dateLocale)}</div></div><div><span style={{fontSize:12,color:C.textLight}}>{t.claims.amount}</span><div style={{fontSize:14,fontWeight:600,color:C.accent}}>{formatCOP(e.amount)}</div></div></div>
+        </div>)}</div>
+        :claimState==="submitted"
+          ?<div style={{...S.card,textAlign:"center"}}>
+            <div style={{fontSize:48,marginBottom:8}}>✅</div>
+            <h2 style={{...S.h2,color:C.success}}>{lang==="es"?"¡Siniestro reportado!":"Claim reported!"}</h2>
+            <div style={{padding:16,background:C.successBg,borderRadius:8,marginBottom:16,display:"inline-block"}}>
+              <div style={{fontSize:12,color:C.success}}>{lang==="es"?"Número de radicado":"Case number"}</div>
+              <div style={{fontSize:18,fontWeight:700,color:C.success}}>SIN-2026-004718</div>
+            </div>
+            <p style={{fontSize:14,color:C.textLight,marginBottom:20,maxWidth:400,marginLeft:"auto",marginRight:"auto"}}>{lang==="es"?"Tu reporte ha sido recibido. Recibirás una notificación con el avance de tu caso en las próximas 24 horas.":"Your report has been received. You'll receive a notification with case updates within the next 24 hours."}</p>
+            <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
+              <button style={S.btn("outline")} onClick={handleNewClaim}>{lang==="es"?"Nuevo reporte":"New report"}</button>
+              <button style={S.btn()} onClick={()=>setTab("parametric")}>{lang==="es"?"Ver mis siniestros":"View my claims"}</button>
+            </div>
+          </div>
+          :claimState==="submitting"
+            ?<div style={{...S.card,textAlign:"center",padding:40}} role="status" aria-live="polite">
+              <div style={{fontSize:32,marginBottom:12}}>📤</div>
+              <p style={{color:C.textLight,fontSize:14}}>{lang==="es"?"Enviando reporte de siniestro...":"Submitting claim report..."}</p>
+            </div>
+          :<div style={S.card}><p style={{fontSize:14,color:C.textLight,marginBottom:16}}>{t.claims.reportDesc}</p>
+            <div style={{display:"grid",gap:14}}>
+              <div><label style={S.label} htmlFor="cp">{t.claims.selectPolicy}</label><select id="cp" style={S.input}>{mockPolicies.map(p=><option key={p.id}>{p.id} — {lang==="es"?p.product:p.productEn}</option>)}</select></div>
+              <div>
+                <label style={S.label} htmlFor="cd">{t.claims.description}</label>
+                <textarea id="cd" style={{...S.input,minHeight:80,resize:"vertical",borderColor:descError?C.error:C.border}} value={claimDesc} onChange={e=>{setClaimDesc(e.target.value);setDescError(false)}} placeholder={lang==="es"?"Describe lo que ocurrió, cuándo y los daños observados...":"Describe what happened, when, and the damages observed..."}/>
+                {descError&&<span style={{fontSize:12,color:C.error}}>{lang==="es"?"La descripción es obligatoria":"Description is required"}</span>}
+              </div>
+              <div><label style={S.label}>{t.claims.attachEvidence}</label>
+                {fileName
+                  ?<div style={{padding:12,background:C.successBg,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                    <span style={{fontSize:13,color:C.success}}>📄 {fileName}</span>
+                    <button style={{background:"none",border:"none",color:C.error,fontSize:13,fontWeight:600}} onClick={()=>setFileName("")}>✕</button>
+                  </div>
+                  :<div onClick={handleFile} style={{padding:20,border:`2px dashed ${C.border}`,borderRadius:8,textAlign:"center",color:C.textLight,fontSize:13,cursor:"pointer"}}>📎 {t.claims.attachEvidence}</div>}
+              </div>
+            </div>
+            <button style={{...S.btn(),marginTop:16}} onClick={handleSubmit}>{t.claims.submit}</button>
+          </div>
+        }
+      </div>;
+    }
+
+    function ProfilePage({t,lang,onLang,fs,onFs,consentGranted,onRevoke,onGrant}) {
+      const [showRevokeConfirm,setShowRevokeConfirm]=useState(false);
+      const [revokeToast,setRevokeToast]=useState(null);
+      const handleRevoke=()=>{onRevoke();setShowRevokeConfirm(false);setRevokeToast(lang==="es"?"✓ Consentimiento revocado exitosamente":"✓ Consent revoked successfully");setTimeout(()=>setRevokeToast(null),3000)};
+      const handleGrant=()=>{onGrant();setRevokeToast(lang==="es"?"✓ Consentimiento otorgado exitosamente":"✓ Consent granted successfully");setTimeout(()=>setRevokeToast(null),3000)};
+
+      return <div>
+        <h1 style={S.h1}>{t.profile.title}</h1><p style={S.sub}>{t.tagline}</p>
+        {revokeToast&&<div role="status" aria-live="polite" style={{padding:12,background:consentGranted?C.successBg:C.warnBg,borderRadius:8,marginBottom:16,fontSize:14,fontWeight:500,color:consentGranted?C.success:C.warn}}>{revokeToast}</div>}
+        <div style={S.card}><h2 style={S.h2}>{t.profile.personalInfo}</h2>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
+            {[[t.profile.name,"Stiven Cardona Monsalve"],[t.profile.document,"CC 1.XXX.XXX.XXX"],[t.profile.email,"stiven@email.com"],[t.profile.phone,"+57 3XX XXX XXXX"]].map(([l,v],i)=><div key={i}><span style={{fontSize:12,color:C.textLight}}>{l}</span><div style={{fontSize:14,fontWeight:500}}>{v}</div></div>)}
+          </div>
+        </div>
+        <div style={S.card}><h2 style={S.h2}>{t.profile.consents}</h2>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${C.border}`,flexWrap:"wrap",gap:8}}>
+            <div><div style={{fontSize:14,fontWeight:500}}>Open Finance — {lang==="es"?"Datos financieros":"Financial data"}</div>
+              <div style={{fontSize:12,color:C.textLight}}>{t.profile.consentStatus}: {consentGranted
+                ?<span style={{color:C.success,fontWeight:600}}>{t.profile.granted}</span>
+                :<span style={{color:C.error,fontWeight:600}}>{lang==="es"?"Revocado":"Revoked"}</span>}
+              </div>
+            </div>
+            {consentGranted
+              ?<button style={{...S.btn("outline"),fontSize:12,padding:"5px 12px",color:C.error,borderColor:C.error}} onClick={()=>setShowRevokeConfirm(true)}>{t.profile.revokeConsent}</button>
+              :<button style={{...S.btn(),fontSize:12,padding:"5px 12px"}} onClick={handleGrant}>{lang==="es"?"Otorgar de nuevo":"Grant again"}</button>}
+          </div>
+          {showRevokeConfirm&&<div style={{marginTop:12,padding:16,background:C.warnBg,borderRadius:8}}>
+            <p style={{fontSize:13,color:C.warn,marginBottom:12,fontWeight:500}}>{lang==="es"?"¿Estás seguro? Al revocar el consentimiento, Solventa no podrá consultar tus datos financieros para personalizar tus cotizaciones.":"Are you sure? By revoking consent, Solventa won't be able to access your financial data to personalize your quotes."}</p>
+            <div style={{display:"flex",gap:8}}>
+              <button style={{...S.btn(),fontSize:12,padding:"6px 14px",background:C.error}} onClick={handleRevoke}>{lang==="es"?"Sí, revocar":"Yes, revoke"}</button>
+              <button style={{...S.btn("outline"),fontSize:12,padding:"6px 14px"}} onClick={()=>setShowRevokeConfirm(false)}>{lang==="es"?"Cancelar":"Cancel"}</button>
+            </div>
+          </div>}
+        </div>
+        <div style={S.card}><h2 style={S.h2}>{t.profile.language} / {t.profile.accessibility}</h2>
+          <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}><span style={{fontSize:13,fontWeight:500}}>{t.profile.language}:</span><button style={{...S.btn(lang==="es"?"primary":"outline"),padding:"5px 14px",fontSize:12}} onClick={()=>onLang("es")}>Español</button><button style={{...S.btn(lang==="en"?"primary":"outline"),padding:"5px 14px",fontSize:12}} onClick={()=>onLang("en")}>English</button></div>
+          <div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}><span style={{fontSize:13,fontWeight:500}}>{t.profile.fontSize}:</span>{["S","M","L"].map(s=><button key={s} style={{...S.btn(fs===s?"primary":"outline"),padding:"4px 12px",fontSize:12}} onClick={()=>onFs(s)}>{s}</button>)}</div>
+          <div style={{marginTop:8,fontSize:12,color:C.textLight}}>{lang==="es"?"Tamaño actual":"Current size"}: {fs} ({fontSizes[fs]}px)</div>
+        </div>
+        <button style={{...S.btn("outline"),color:C.error,borderColor:C.error,marginTop:8}}>{t.profile.logout}</button>
+      </div>;
+    }
+
+    const fontSizes = {S:13,M:15,L:18};
+
+    function App() {
+      const [lang,setLang]=useState("es");
+      const [page,setPage]=useState("home");
+      const [fs,setFs]=useState("M");
+      const [consentGranted,setConsentGranted]=useState(true);
+      const t=i18n[lang];
+      const navItems=[{key:"home",icon:"🏠"},{key:"quote",icon:"📋"},{key:"wallet",icon:"🛡️"},{key:"claims",icon:"⚡"},{key:"profile",icon:"👤"}];
+      const nav=useCallback(p=>{setPage(p);window.scrollTo(0,0)},[]);
+
+      return <div style={{fontSize:fontSizes[fs]}}>
+        <a className="skip-link" href="#main-content" onClick={e=>{e.preventDefault();document.getElementById("main-content")?.focus()}}>{t.a11y.skipToContent}</a>
+        <header style={S.header} role="banner">
+          <div style={{display:"flex",alignItems:"center",gap:12}}><button style={S.logo} onClick={()=>nav("home")} aria-label={t.appName}>{t.appName}</button><span style={{fontSize:11,color:"rgba(255,255,255,0.5)",fontStyle:"italic"}}>Prototype v1.0</span></div>
+          <nav style={S.nav} aria-label="Navegación principal">
+            {navItems.map(n=><button key={n.key} style={S.navBtn(page===n.key)} onClick={()=>nav(n.key)} aria-current={page===n.key?"page":undefined} title={t.nav[n.key]}><span aria-hidden="true">{n.icon}</span> {t.nav[n.key]}</button>)}
+            <button style={S.langBtn} onClick={()=>setLang(l=>l==="es"?"en":"es")} aria-label={t.a11y.langToggle} title={t.a11y.langToggle}>{lang==="es"?"EN":"ES"}</button>
+          </nav>
+        </header>
+        <main id="main-content" style={S.main} tabIndex={-1} role="main">
+          {page==="home"&&<HomePage t={t} onNav={nav}/>}
+          {page==="quote"&&<QuotePage t={t} lang={lang} onNav={nav}/>}
+          {page==="subscribe"&&<SubscriptionPage t={t} lang={lang} onNav={nav}/>}
+          {page==="wallet"&&<WalletPage t={t} lang={lang}/>}
+          {page==="claims"&&<ClaimsPage t={t} lang={lang}/>}
+          {page==="profile"&&<ProfilePage t={t} lang={lang} onLang={setLang} fs={fs} onFs={setFs} consentGranted={consentGranted} onRevoke={()=>setConsentGranted(false)} onGrant={()=>setConsentGranted(true)}/>}
+        </main>
+        <footer style={S.footer} role="contentinfo">
+          <div>© 2026 Solventa — {t.tagline}</div>
+          <div style={{marginTop:4,fontSize:11}}>MISW4501 · Proyecto Final · Grupo 10 · Universidad de los Andes</div>
+          <div style={{marginTop:6}}><span style={S.tag}>Accesibilidad</span><span style={S.tag}>i18n ES/EN</span><span style={S.tag}>L10n Colombia</span></div>
+        </footer>
+      </div>;
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>
