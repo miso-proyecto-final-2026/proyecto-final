@@ -14,6 +14,10 @@ interface BotonProps {
   cargando?: boolean;
   etiquetaAccesible?: string;
   type?: 'button' | 'submit';
+  /** Solo para botones tipo toggle (p.ej. mostrar/ocultar contraseña en Campo). */
+  ariaPressed?: boolean;
+  /** Solo para botones que abren/cierran un bloque en linea (p.ej. "Ver términos"). */
+  ariaExpanded?: boolean;
 }
 
 /** children es texto plano si es un string o un numero (p.ej. un contador). */
@@ -35,6 +39,8 @@ export default function Boton({
   cargando = false,
   etiquetaAccesible,
   type = 'button',
+  ariaPressed,
+  ariaExpanded,
 }: BotonProps) {
   if (!esSoloTexto(children) && !etiquetaAccesible) {
     console.warn(
@@ -59,6 +65,8 @@ export default function Boton({
       disabled={deshabilitado || cargando}
       aria-busy={cargando || undefined}
       aria-label={etiquetaAccesible}
+      aria-pressed={ariaPressed}
+      aria-expanded={ariaExpanded}
     >
       {/* opacity, no visibility/display: el boton conserva su ancho durante
        * la carga y, si no hay etiquetaAccesible, el texto sigue siendo

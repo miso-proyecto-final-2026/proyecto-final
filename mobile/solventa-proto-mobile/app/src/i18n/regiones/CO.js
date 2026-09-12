@@ -7,11 +7,12 @@
  */
 const CO = {
   moneda: 'COP',
-  documento: {
-    claveEtiqueta: 'documento.cedula',
-    patron: /^\d{6,10}$/,
-    ejemplo: '1020345678',
-  },
+  tiposDocumento: [
+    { valor: 'CC', claveEtiqueta: 'documento.cc', ejemplo: '1020345678' },
+    { valor: 'CE', claveEtiqueta: 'documento.ce', ejemplo: '345678' },
+    { valor: 'PA', claveEtiqueta: 'documento.pasaporte', ejemplo: 'AN123456' },
+  ],
+  ciudades: ['Bogota', 'Medellin', 'Cali', 'Barranquilla', 'Bucaramanga'],
   telefono: {
     prefijo: '+57',
     patron: /^\d{10}$/,

@@ -55,10 +55,7 @@ export default function Bienvenida() {
       <div className={styles.acciones}>
         {conBiometria ? (
           <>
-            <Boton
-              anchoCompleto
-              onClick={() => navigate('/ingreso-biometrico')}
-            >
+            <Boton anchoCompleto onClick={() => navigate('/ingreso')}>
               {t('bienvenida.entrarBiometria')}
             </Boton>
             <Boton
@@ -77,7 +74,7 @@ export default function Bienvenida() {
             <Boton
               variante="texto"
               anchoCompleto
-              onClick={() => navigate('/ingreso-biometrico')}
+              onClick={() => navigate('/ingreso')}
             >
               {t('bienvenida.yaTengoCuenta')}
             </Boton>

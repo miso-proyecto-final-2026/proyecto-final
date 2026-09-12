@@ -1,0 +1,75 @@
+.pantalla {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+  padding: var(--esp-6) var(--esp-5) var(--esp-5);
+  background: var(--color-fondo);
+}
+
+.encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.titulo {
+  margin: 0;
+  color: var(--color-texto);
+  font-family: var(--fuente);
+  font-size: var(--texto-titulo);
+  font-weight: 700;
+}
+
+.subtitulo {
+  margin: 0;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente);
+  font-size: var(--texto-l);
+}
+
+/* Separador "o" entre el ingreso biometrico y el formulario con credenciales:
+ * las lineas son decorativas (::before/::after), el texto es el unico
+ * contenido real y llega ya traducido desde la pantalla. */
+.separador {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+}
+
+.separador::before,
+.separador::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-borde);
+}
+
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+}
+
+.fueraDeAlcance {
+  margin: 0;
+  padding: var(--esp-3);
+  border-radius: var(--radio-s);
+  background: var(--color-primario-suave);
+  color: var(--color-texto);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+}
+
+.pie {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  margin-top: auto;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+}

@@ -1,2 +1,251 @@
-.contenedor {
+/* Altura de BarraNavegacion: duplica el valor de --alto-barra definido en
+ * MarcoMovil/estilos.module.css. No se puede leer esa variable desde aca
+ * porque este boton se monta fuera de <MarcoMovil> (ver app/routes/app.tsx)
+ * y las custom properties de CSS solo heredan hacia el DOM de adentro hacia
+ * afuera. Si ese valor cambia, hay que actualizarlo en los dos lugares. */
+.botonFlotante {
+  position: fixed;
+  right: var(--esp-4);
+  bottom: calc(64px + var(--esp-4) + env(safe-area-inset-bottom));
+  width: var(--alto-tactil);
+  height: var(--alto-tactil);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-texto-secundario);
+  color: var(--color-superficie);
+  cursor: pointer;
+  /* Por encima del contenido de la app, por debajo de la hoja (z-index 9998). */
+  z-index: 9997;
+}
+
+@keyframes deslizarDesdeDerecha {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.hoja {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-superficie);
+  box-shadow: calc(var(--esp-1) * -1) 0 var(--esp-4)
+    color-mix(in srgb, var(--color-texto) 25%, transparent);
+  z-index: 9998;
+  animation: deslizarDesdeDerecha 200ms ease-out;
+}
+
+.encabezado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  padding: var(--esp-4);
+  border-bottom: 1px solid var(--color-borde);
+  flex-shrink: 0;
+}
+
+.tituloPanel {
+  margin: 0;
+  color: var(--color-texto);
+  font-family: var(--fuente);
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.leyenda {
+  margin: var(--esp-1) 0 0;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+}
+
+.contenido {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--esp-3) var(--esp-4) var(--esp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+}
+
+.seccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  padding-top: var(--esp-3);
+  border-top: 1px solid var(--color-borde);
+}
+
+.seccion:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.tituloSeccion {
+  margin: 0;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.listaEstado {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+}
+
+.filaEstado {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--esp-2);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+}
+
+.filaEstado dt {
+  color: var(--color-texto-secundario);
+}
+
+.filaEstado dd {
+  margin: 0;
+  color: var(--color-texto);
+  font-weight: 600;
+  text-align: right;
+}
+
+.notaPequena {
+  margin: 0;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+}
+
+.avisoRegion {
+  margin: 0;
+  color: var(--color-advertencia);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+}
+
+.confirmacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  padding: var(--esp-3);
+  border-radius: var(--radio-s);
+  background: var(--color-fondo);
+}
+
+.confirmacion p {
+  margin: 0;
+  color: var(--color-texto);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+}
+
+.confirmacionAcciones {
+  display: flex;
+  gap: var(--esp-2);
+}
+
+.saltos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.filaBotones {
+  display: flex;
+  gap: var(--esp-2);
+}
+
+.filaBotones > * {
+  flex: 1;
+}
+
+.interruptor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  width: 100%;
+  padding: var(--esp-2) 0;
+  border: none;
+  background: transparent;
+  color: var(--color-texto);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+  cursor: pointer;
+  text-align: left;
+}
+
+.pista {
+  position: relative;
+  width: calc(var(--esp-6) + var(--esp-2));
+  height: var(--esp-5);
+  border-radius: var(--radio-l);
+  background: var(--color-borde);
+  flex-shrink: 0;
+  transition: background-color 150ms ease;
+}
+
+.pistaActiva {
+  background: var(--color-primario);
+}
+
+.perilla {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(var(--esp-5) - 4px);
+  height: calc(var(--esp-5) - 4px);
+  border-radius: 50%;
+  background: var(--color-superficie);
+  transition: transform 150ms ease;
+}
+
+.pistaActiva .perilla {
+  transform: translateX(calc(var(--esp-6) + var(--esp-2) - var(--esp-5)));
+}
+
+.estadoCompleto {
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+  color: var(--color-texto);
+}
+
+.estadoCompleto summary {
+  cursor: pointer;
+  color: var(--color-primario);
+  font-weight: 600;
+}
+
+.pre {
+  margin: var(--esp-2) 0 0;
+  padding: var(--esp-2);
+  border-radius: var(--radio-s);
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: var(--texto-s);
+  overflow-x: auto;
+  white-space: pre;
 }

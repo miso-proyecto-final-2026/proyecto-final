@@ -6,11 +6,12 @@
  */
 const MX = {
   moneda: 'MXN',
-  documento: {
-    claveEtiqueta: 'documento.curp',
-    patron: /^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d$/,
-    ejemplo: 'GOMC900315HDFNRL04',
-  },
+  tiposDocumento: [
+    { valor: 'CURP', claveEtiqueta: 'documento.curp', ejemplo: 'GOMC900315HDFNRL04' },
+    { valor: 'INE', claveEtiqueta: 'documento.ine', ejemplo: '1234567890ABCDEFGH' },
+    { valor: 'PA', claveEtiqueta: 'documento.pasaporte', ejemplo: 'G12345678' },
+  ],
+  ciudades: ['Ciudad de Mexico', 'Guadalajara', 'Monterrey', 'Puebla', 'Merida'],
   telefono: {
     prefijo: '+52',
     patron: /^\d{10}$/,

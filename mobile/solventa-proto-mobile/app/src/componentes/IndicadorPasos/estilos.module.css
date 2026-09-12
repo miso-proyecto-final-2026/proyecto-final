@@ -1,0 +1,35 @@
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.segmentos {
+  display: flex;
+  gap: var(--esp-2);
+}
+
+.segmento {
+  flex: 1;
+  height: var(--esp-1);
+  border-radius: var(--radio-s);
+  background: var(--color-borde);
+}
+
+.activo {
+  background: var(--color-primario);
+}
+
+.completado {
+  background: var(--color-acento);
+}
+
+/* El texto es la senal real de cual es el paso activo: los colores de
+ * arriba son un refuerzo visual, nunca la unica senal. */
+.textoPaso {
+  margin: 0;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+  font-weight: 600;
+}

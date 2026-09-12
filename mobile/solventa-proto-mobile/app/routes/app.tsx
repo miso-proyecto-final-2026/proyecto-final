@@ -9,7 +9,7 @@ import Registro from '~/src/pantallas/Registro';
 import VerificacionIdentidad from '~/src/pantallas/VerificacionIdentidad';
 import ResultadoVerificacion from '~/src/pantallas/ResultadoVerificacion';
 import ConfiguracionBiometria from '~/src/pantallas/ConfiguracionBiometria';
-import IngresoBiometrico from '~/src/pantallas/IngresoBiometrico';
+import Ingreso from '~/src/pantallas/Ingreso';
 import Consentimiento from '~/src/pantallas/Consentimiento';
 import Inicio from '~/src/pantallas/Inicio';
 import Cotizacion from '~/src/pantallas/Cotizacion';
@@ -49,7 +49,7 @@ export default function AppRoutes() {
             path="/configuracion-biometria"
             element={<ConfiguracionBiometria />}
           />
-          <Route path="/ingreso-biometrico" element={<IngresoBiometrico />} />
+          <Route path="/ingreso" element={<Ingreso />} />
           <Route path="/consentimiento" element={<Consentimiento />} />
           <Route path="/inicio" element={<Inicio />} />
           <Route path="/cotizacion" element={<Cotizacion />} />

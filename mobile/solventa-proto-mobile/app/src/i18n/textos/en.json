@@ -1,6 +1,7 @@
 {
   "comun": {
     "continuar": "Continue",
+    "atras": "Back",
     "cancelar": "Cancel",
     "aceptar": "Accept",
     "volver": "Back",
@@ -24,14 +25,34 @@
     "entrarBiometria": "Sign in with biometrics"
   },
   "registro": {
-    "titulo": "Let's create your account",
+    "titulo": "Create your account",
+    "paso1": "Identity",
+    "paso2": "Contact and access",
+    "ejemplo": "Example: {ejemplo}",
+    "prefijo": "The {prefijo} prefix will be used",
+    "direccion2Marcador": "Apartment, floor, landmark (optional)",
+    "crearCuenta": "Create account",
+    "terminos": "I accept the terms of service and authorize the processing of my personal data.",
+    "verTerminos": "View terms",
+    "terminosTexto": "We collect your name, ID, contact details and address to create your account and offer you insurance. We use your data to verify your identity, generate quotes and issue your policies. We don't share it with third parties unless required by law. You can ask us to correct or delete it at any time.",
+    "debeAceptar": "You must accept the terms to create your account.",
+    "yaTengoCuenta": "Already have an account?",
+    "iniciarSesion": "Sign in",
+    "confirmarSalida": "If you leave now, you'll lose what you wrote in this form.",
+    "salirSi": "Yes, leave",
+    "salirNo": "Stay",
     "nombre": "First name",
     "apellido": "Last name",
-    "email": "Email",
+    "fechaNacimiento": "Date of birth",
+    "tipoDocumento": "Document type",
+    "numeroDocumento": "Document number",
     "telefono": "Phone",
-    "documento": "ID number",
-    "continuar": "Continue",
-    "errorCamposObligatorios": "Fill in every field to continue."
+    "direccion1": "Address",
+    "direccion2": "Address 2",
+    "ciudad": "City",
+    "correo": "Email",
+    "contrasena": "Password",
+    "confirmarContrasena": "Confirm password"
   },
   "verificacion": {
     "titulo": "Let's verify your identity",
@@ -60,10 +81,20 @@
     "omitir": "Not now"
   },
   "ingreso": {
-    "titulo": "Sign in with biometrics",
-    "instruccion": "Confirm your identity to continue.",
-    "usarBiometria": "Use fingerprint or face",
-    "usarOtroMetodo": "Sign in another way"
+    "titulo": "Sign in to your account",
+    "subtitulo": "Enter your details to continue.",
+    "separador": "or",
+    "correo": "Email",
+    "correoMarcador": "you@example.com",
+    "contrasena": "Password",
+    "mostrarContrasena": "Show password",
+    "ocultarContrasena": "Hide password",
+    "entrar": "Sign in",
+    "entrarBiometria": "Sign in with biometrics",
+    "contrasenaOlvidada": "Forgot your password?",
+    "fueraDeAlcance": "Password recovery isn't available in this test version.",
+    "sinCuenta": "Don't have an account?",
+    "crearCuenta": "Create account"
   },
   "consentimiento": {
     "titulo": "Share your financial information",
@@ -155,7 +186,11 @@
   },
   "documento": {
     "cedula": "National ID",
-    "curp": "CURP"
+    "cc": "National ID",
+    "ce": "Foreign resident ID",
+    "pasaporte": "Passport",
+    "curp": "CURP",
+    "ine": "INE (Mexican voter ID)"
   },
   "seguros": {
     "viaje": "Travel insurance",

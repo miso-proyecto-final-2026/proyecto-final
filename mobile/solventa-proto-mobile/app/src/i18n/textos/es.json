@@ -1,6 +1,7 @@
 {
   "comun": {
     "continuar": "Continuar",
+    "atras": "Atrás",
     "cancelar": "Cancelar",
     "aceptar": "Aceptar",
     "volver": "Volver",
@@ -24,14 +25,34 @@
     "entrarBiometria": "Entrar con biometría"
   },
   "registro": {
-    "titulo": "Creemos tu cuenta",
+    "titulo": "Crea tu cuenta",
+    "paso1": "Identidad",
+    "paso2": "Contacto y acceso",
+    "ejemplo": "Ejemplo: {ejemplo}",
+    "prefijo": "Se usará el prefijo {prefijo}",
+    "direccion2Marcador": "Apartamento, piso, referencia (opcional)",
+    "crearCuenta": "Crear cuenta",
+    "terminos": "Acepto los términos del servicio y autorizo el tratamiento de mis datos personales.",
+    "verTerminos": "Ver términos",
+    "terminosTexto": "Recogemos tu nombre, documento, contacto y dirección para crear tu cuenta y ofrecerte seguros. Usamos tus datos para verificar tu identidad, generar cotizaciones y emitir tus pólizas. No los compartimos con terceros salvo que la ley lo exija. Puedes pedirnos que los corrijamos o eliminemos cuando quieras.",
+    "debeAceptar": "Debes aceptar los términos para crear tu cuenta.",
+    "yaTengoCuenta": "¿Ya tienes cuenta?",
+    "iniciarSesion": "Iniciar sesión",
+    "confirmarSalida": "Si sales ahora, perderás lo que escribiste en este formulario.",
+    "salirSi": "Sí, salir",
+    "salirNo": "Quedarme",
     "nombre": "Nombres",
     "apellido": "Apellidos",
-    "email": "Correo electrónico",
+    "fechaNacimiento": "Fecha de nacimiento",
+    "tipoDocumento": "Tipo de documento",
+    "numeroDocumento": "Número de documento",
     "telefono": "Teléfono",
-    "documento": "Número de documento",
-    "continuar": "Continuar",
-    "errorCamposObligatorios": "Completa todos los campos para continuar."
+    "direccion1": "Dirección",
+    "direccion2": "Dirección 2",
+    "ciudad": "Ciudad",
+    "correo": "Correo electrónico",
+    "contrasena": "Contraseña",
+    "confirmarContrasena": "Confirmar contraseña"
   },
   "verificacion": {
     "titulo": "Verifiquemos tu identidad",
@@ -60,10 +81,20 @@
     "omitir": "Ahora no"
   },
   "ingreso": {
-    "titulo": "Ingresa con biometría",
-    "instruccion": "Confirma tu identidad para continuar.",
-    "usarBiometria": "Usar huella o rostro",
-    "usarOtroMetodo": "Ingresar de otra forma"
+    "titulo": "Ingresa a tu cuenta",
+    "subtitulo": "Ingresa tus datos para continuar.",
+    "separador": "o",
+    "correo": "Correo electrónico",
+    "correoMarcador": "tu@correo.com",
+    "contrasena": "Contraseña",
+    "mostrarContrasena": "Mostrar contraseña",
+    "ocultarContrasena": "Ocultar contraseña",
+    "entrar": "Entrar",
+    "entrarBiometria": "Entrar con biometría",
+    "contrasenaOlvidada": "¿Olvidaste tu contraseña?",
+    "fueraDeAlcance": "La recuperación de contraseña no está disponible en esta versión de prueba.",
+    "sinCuenta": "¿No tienes cuenta?",
+    "crearCuenta": "Crear cuenta"
   },
   "consentimiento": {
     "titulo": "Comparte tu información financiera",
@@ -155,7 +186,11 @@
   },
   "documento": {
     "cedula": "Cédula de ciudadanía",
-    "curp": "CURP"
+    "cc": "Cédula de ciudadanía",
+    "ce": "Cédula de extranjería",
+    "pasaporte": "Pasaporte",
+    "curp": "CURP",
+    "ine": "INE"
   },
   "seguros": {
     "viaje": "Seguro de viaje",

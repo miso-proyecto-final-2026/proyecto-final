@@ -41,6 +41,12 @@ export const estadoInicial = {
     email: '',
     telefono: '',
     documento: '',
+    fechaNacimiento: '',
+    tipoDocumento: '', // 'CC' | 'CE' | 'PA' | 'CURP' | 'INE'
+    direccion1: '',
+    direccion2: '',
+    ciudad: '',
+    terminosAceptados: false,
     estadoKyc: ESTADOS_KYC.NO_INICIADO,
     motivoRechazoKyc: null,
     biometriaActiva: false,

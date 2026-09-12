@@ -12,65 +12,57 @@
 }
 
 /* Parte de la senal de "requerido": el asterisco solo nunca es suficiente,
- * por eso se combina con .inputRequerido sobre el propio input. */
+ * por eso se combina con .selectRequerido sobre el propio select. */
 .marcaRequerido {
   color: var(--color-error);
   font-weight: 700;
 }
 
 .envoltorio {
-  display: flex;
-}
-
-.envoltorioContrasena {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.input {
+.select {
   width: 100%;
   min-height: var(--alto-tactil);
-  padding: 0 var(--esp-4);
+  padding: 0 var(--esp-7) 0 var(--esp-4);
   border: 1px solid var(--color-borde);
   border-radius: var(--radio-s);
   background: var(--color-superficie);
   color: var(--color-texto);
   font-family: var(--fuente);
   font-size: var(--texto-m);
+  /* La flecha propia (IconoFlecha) reemplaza la nativa del sistema. */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
-.input::placeholder {
-  color: var(--color-texto-secundario);
-}
-
-.input:disabled {
+.select:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
 /* Segunda senal visual de "requerido" (ademas del asterisco en la etiqueta):
  * un borde izquierdo mas grueso, no solo color. */
-.inputRequerido {
+.selectRequerido {
   border-left-width: var(--esp-1);
-}
-
-.inputConBoton {
-  padding-right: var(--esp-7);
 }
 
 /* El error se comunica con borde Y con texto (.error mas abajo), nunca solo
  * con color. */
-.inputConError {
+.selectConError {
   border-color: var(--color-error);
 }
 
-.contenedorBotonOjo {
+.flecha {
   position: absolute;
-  right: var(--esp-2);
-  top: 50%;
-  transform: translateY(-50%);
+  right: var(--esp-3);
+  display: flex;
   color: var(--color-texto-secundario);
+  pointer-events: none;
 }
 
 .ayuda {
