@@ -1,0 +1,180 @@
+{
+  "comun": {
+    "continuar": "Continue",
+    "cancelar": "Cancel",
+    "aceptar": "Accept",
+    "volver": "Back",
+    "cerrar": "Close",
+    "reintentar": "Retry",
+    "cargando": "Loading…",
+    "guardar": "Save",
+    "listo": "Done"
+  },
+  "navegacion": {
+    "inicio": "Home",
+    "billetera": "Wallet",
+    "notificaciones": "Notifications",
+    "ajustes": "Settings"
+  },
+  "bienvenida": {
+    "titulo": "Solventa",
+    "eslogan": "Get and manage your insurance in minutes, with full transparency.",
+    "crearCuenta": "Create account",
+    "yaTengoCuenta": "I already have an account",
+    "entrarBiometria": "Sign in with biometrics"
+  },
+  "registro": {
+    "titulo": "Let's create your account",
+    "nombre": "First name",
+    "apellido": "Last name",
+    "email": "Email",
+    "telefono": "Phone",
+    "documento": "ID number",
+    "continuar": "Continue",
+    "errorCamposObligatorios": "Fill in every field to continue."
+  },
+  "verificacion": {
+    "titulo": "Let's verify your identity",
+    "instruccion": "Take a photo of your ID and then a selfie.",
+    "documento": "ID photo",
+    "selfie": "Selfie",
+    "enviar": "Submit verification",
+    "procesando": "We're verifying your details…"
+  },
+  "resultadoVerificacion": {
+    "aprobado": {
+      "titulo": "Identity verified!",
+      "mensaje": "You can now enable biometric access and quote your insurance.",
+      "continuar": "Continue"
+    },
+    "rechazado": {
+      "titulo": "We couldn't verify you",
+      "mensaje": "Make sure your ID is readable and try again.",
+      "reintentar": "Retry"
+    }
+  },
+  "biometria": {
+    "titulo": "Enable biometric access",
+    "descripcion": "Use your fingerprint or face to sign in faster next time.",
+    "activar": "Enable biometrics",
+    "omitir": "Not now"
+  },
+  "ingreso": {
+    "titulo": "Sign in with biometrics",
+    "instruccion": "Confirm your identity to continue.",
+    "usarBiometria": "Use fingerprint or face",
+    "usarOtroMetodo": "Sign in another way"
+  },
+  "consentimiento": {
+    "titulo": "Share your financial information",
+    "descripcion": "With your authorization, we use your financial data (Open Finance) to offer you a personalized premium.",
+    "otorgar": {
+      "boton": "Authorize",
+      "confirmacion": "Authorization granted. Your offer is now personalized."
+    },
+    "revocar": {
+      "boton": "Revoke authorization",
+      "advertencia": "If you revoke it, you lose the personalized offer and your premium may go up.",
+      "confirmacion": "Authorization revoked."
+    }
+  },
+  "inicio": {
+    "titulo": "Hi, {nombre}",
+    "verCotizacion": "Quote insurance",
+    "misPolizas": "My policies"
+  },
+  "cotizacion": {
+    "titulo": "Quote your insurance",
+    "tipoSeguro": "Insurance type",
+    "calcular": "Calculate premium",
+    "calculando": "Calculating your premium…",
+    "errorCalculo": "We couldn't calculate your quote. Please try again."
+  },
+  "resultadoCotizacion": {
+    "titulo": "Your quote",
+    "primaMensual": "Estimated premium",
+    "coberturas": "Included coverage",
+    "comprar": "Buy now",
+    "descartar": "Look for another option",
+    "avisoSinConsentimiento": "Without Open Finance authorization, the premium includes a surcharge."
+  },
+  "pago": {
+    "titulo": "Confirm your payment",
+    "resumen": "Purchase summary",
+    "metodoPago": "Payment method",
+    "confirmar": "Confirm payment",
+    "procesando": "Processing your payment…",
+    "errorPago": "We couldn't process the payment. Please try again."
+  },
+  "firma": {
+    "titulo": "Sign your policy",
+    "instruccion": "Draw your signature to complete the purchase.",
+    "firmar": "Sign",
+    "limpiar": "Clear signature"
+  },
+  "certificado": {
+    "titulo": "Your policy is active!",
+    "mensaje": "We issued your certificate. You can now download it from your wallet.",
+    "descargar": "Download certificate",
+    "irABilletera": "Go to my wallet"
+  },
+  "billetera": {
+    "titulo": "My wallet",
+    "sinPolizas": "You don't have any active policies yet.",
+    "verDetalle": "View detail",
+    "sinConexion": "You're offline: showing partial information saved on your device."
+  },
+  "detallePoliza": {
+    "titulo": "Policy detail",
+    "numero": "Policy number",
+    "vigenciaDesde": "Valid from",
+    "vigenciaHasta": "Valid until",
+    "coberturas": "Coverage",
+    "descargarCertificado": "Download certificate"
+  },
+  "notificaciones": {
+    "titulo": "Notifications",
+    "sinNotificaciones": "You don't have any notifications yet.",
+    "certificado": {
+      "titulo": "Your policy {numero} is now available",
+      "cuerpo": "Download your certificate from your wallet whenever you like."
+    },
+    "pagoParametrico": {
+      "titulo": "You received a payout for {evento}",
+      "cuerpo": "We deposited {monto} {moneda} into your account for policy {numero}."
+    }
+  },
+  "ajustes": {
+    "titulo": "Settings",
+    "idioma": "Language",
+    "region": "Country",
+    "tamanoTexto": "Text size",
+    "tamanoNormal": "Normal",
+    "tamanoGrande": "Large",
+    "cerrarSesion": "Sign out"
+  },
+  "documento": {
+    "cedula": "National ID",
+    "curp": "CURP"
+  },
+  "seguros": {
+    "viaje": "Travel insurance",
+    "dispositivos": "Device insurance",
+    "vida": "Life insurance",
+    "desempleo": "Unemployment insurance"
+  },
+  "errores": {
+    "generico": "Something went wrong. Please try again.",
+    "sinConexion": "No internet connection.",
+    "campoObligatorio": "This field is required.",
+    "documentoInvalido": "The ID number isn't valid."
+  },
+  "depuracion": {
+    "titulo": "Debug panel",
+    "sinConexion": "Simulate offline mode",
+    "forzarFalloKyc": "Force verification failure",
+    "forzarFalloPago": "Force payment failure",
+    "textosLargos": "Long text (pseudo-localization)",
+    "reiniciarSesion": "Reset test session"
+  }
+}

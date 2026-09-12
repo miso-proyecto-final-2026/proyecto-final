@@ -1,0 +1,64 @@
+/**
+ * Tokens de diseno del prototipo Solventa (movil).
+ *
+ * Unica fuente de verdad para color, espaciado, radios y tipografia.
+ * Las pantallas y componentes SIEMPRE consumen estas variables via
+ * var(--...); nunca hardcodean un color o un tamano de texto en px.
+ */
+
+:root {
+  /* --- Color ------------------------------------------------------------ */
+  --color-primario: #1b4db1;
+  --color-primario-oscuro: #153c8a;
+  --color-primario-suave: #e8eefb;
+  --color-acento: #0f9d8c;
+  --color-fondo: #f5f6f8;
+  --color-superficie: #ffffff;
+  --color-texto: #14181f;
+  --color-texto-secundario: #5a6472;
+  --color-borde: #d9dee6;
+  --color-exito: #1b7f4b;
+  --color-error: #b3261e;
+  --color-advertencia: #8a5a00;
+  --color-foco: #0f62fe;
+
+  /* --- Espaciado ---------------------------------------------------------- */
+  --esp-1: 4px;
+  --esp-2: 8px;
+  --esp-3: 12px;
+  --esp-4: 16px;
+  --esp-5: 24px;
+  --esp-6: 32px;
+  --esp-7: 48px;
+
+  /* --- Radios y medidas tactiles ------------------------------------------ */
+  --radio-s: 8px;
+  --radio-m: 12px;
+  --radio-l: 20px;
+  --alto-tactil: 44px;
+  --ancho-movil: 420px;
+
+  /* --- Tipografia ---------------------------------------------------------
+   * --texto-base es el unico valor absoluto: todo lo demas se deriva de el
+   * con calc(), para que el ajuste de "tamano de texto grande" (ver abajo)
+   * escale toda la escala tipografica de una sola vez. */
+  --fuente: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --texto-base: 16px;
+  --texto-s: calc(var(--texto-base) * 0.875);
+  --texto-m: var(--texto-base);
+  --texto-l: calc(var(--texto-base) * 1.125);
+  --texto-xl: calc(var(--texto-base) * 1.375);
+  --texto-titulo: calc(var(--texto-base) * 1.75);
+}
+
+/* Ajuste de accesibilidad: StoreProvider escribe este atributo en <body>
+ * segun estado.preferencias.tamanoTexto. Al redefinir --texto-base aqui,
+ * toda la escala (--texto-s .. --texto-titulo) crece con ella. */
+body[data-tamano-texto='grande'] {
+  --texto-base: 19px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-foco);
+  outline-offset: 2px;
+}

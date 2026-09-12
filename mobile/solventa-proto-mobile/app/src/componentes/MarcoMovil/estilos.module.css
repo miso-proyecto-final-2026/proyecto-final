@@ -1,0 +1,42 @@
+.fondoExterior {
+  display: flex;
+  justify-content: center;
+  min-height: 100dvh;
+  background: var(--color-fondo);
+}
+
+.marco {
+  /* Reservado para BarraNavegacion: el contenido usa esta variable para no
+   * quedar tapado por la barra inferior (ver .contenido). */
+  --alto-barra: 64px;
+
+  position: relative;
+  width: 100%;
+  max-width: var(--ancho-movil);
+  height: 100dvh;
+  background: var(--color-fondo);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.contenido {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(var(--alto-barra) + env(safe-area-inset-bottom));
+}
+
+/* Pantallas anchas (escritorio): el marco se distingue del fondo. */
+@media (min-width: 640px) {
+  .fondoExterior {
+    background: var(--color-texto);
+  }
+
+  .marco {
+    border-radius: var(--radio-l);
+    box-shadow: 0 var(--esp-2) var(--esp-6)
+      color-mix(in srgb, var(--color-texto) 35%, transparent);
+  }
+}

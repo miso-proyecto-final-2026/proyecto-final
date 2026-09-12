@@ -1,0 +1,180 @@
+{
+  "comun": {
+    "continuar": "Continuar",
+    "cancelar": "Cancelar",
+    "aceptar": "Aceptar",
+    "volver": "Volver",
+    "cerrar": "Cerrar",
+    "reintentar": "Reintentar",
+    "cargando": "Cargando…",
+    "guardar": "Guardar",
+    "listo": "Listo"
+  },
+  "navegacion": {
+    "inicio": "Inicio",
+    "billetera": "Billetera",
+    "notificaciones": "Notificaciones",
+    "ajustes": "Ajustes"
+  },
+  "bienvenida": {
+    "titulo": "Solventa",
+    "eslogan": "Contrata y gestiona tus seguros en minutos, con total transparencia.",
+    "crearCuenta": "Crear cuenta",
+    "yaTengoCuenta": "Ya tengo cuenta",
+    "entrarBiometria": "Entrar con biometría"
+  },
+  "registro": {
+    "titulo": "Creemos tu cuenta",
+    "nombre": "Nombres",
+    "apellido": "Apellidos",
+    "email": "Correo electrónico",
+    "telefono": "Teléfono",
+    "documento": "Número de documento",
+    "continuar": "Continuar",
+    "errorCamposObligatorios": "Completa todos los campos para continuar."
+  },
+  "verificacion": {
+    "titulo": "Verifiquemos tu identidad",
+    "instruccion": "Toma una foto de tu documento y luego una selfie.",
+    "documento": "Foto del documento",
+    "selfie": "Selfie",
+    "enviar": "Enviar verificación",
+    "procesando": "Estamos verificando tus datos…"
+  },
+  "resultadoVerificacion": {
+    "aprobado": {
+      "titulo": "¡Identidad verificada!",
+      "mensaje": "Ya puedes activar el acceso biométrico y cotizar tus seguros.",
+      "continuar": "Continuar"
+    },
+    "rechazado": {
+      "titulo": "No pudimos verificarte",
+      "mensaje": "Revisa que el documento sea legible y vuelve a intentarlo.",
+      "reintentar": "Reintentar"
+    }
+  },
+  "biometria": {
+    "titulo": "Activa el acceso biométrico",
+    "descripcion": "Usa tu huella o rostro para entrar más rápido la próxima vez.",
+    "activar": "Activar biometría",
+    "omitir": "Ahora no"
+  },
+  "ingreso": {
+    "titulo": "Ingresa con biometría",
+    "instruccion": "Confirma tu identidad para continuar.",
+    "usarBiometria": "Usar huella o rostro",
+    "usarOtroMetodo": "Ingresar de otra forma"
+  },
+  "consentimiento": {
+    "titulo": "Comparte tu información financiera",
+    "descripcion": "Con tu autorización, usamos tus datos financieros (Open Finance) para ofrecerte una prima personalizada.",
+    "otorgar": {
+      "boton": "Autorizar",
+      "confirmacion": "Autorización otorgada. Tu oferta ya está personalizada."
+    },
+    "revocar": {
+      "boton": "Revocar autorización",
+      "advertencia": "Si revocas, pierdes la oferta personalizada y la prima puede subir.",
+      "confirmacion": "Autorización revocada."
+    }
+  },
+  "inicio": {
+    "titulo": "Hola, {nombre}",
+    "verCotizacion": "Cotizar un seguro",
+    "misPolizas": "Mis pólizas"
+  },
+  "cotizacion": {
+    "titulo": "Cotiza tu seguro",
+    "tipoSeguro": "Tipo de seguro",
+    "calcular": "Calcular prima",
+    "calculando": "Calculando tu prima…",
+    "errorCalculo": "No pudimos calcular tu cotización. Intenta de nuevo."
+  },
+  "resultadoCotizacion": {
+    "titulo": "Tu cotización",
+    "primaMensual": "Prima estimada",
+    "coberturas": "Coberturas incluidas",
+    "comprar": "Comprar ahora",
+    "descartar": "Buscar otra opción",
+    "avisoSinConsentimiento": "Sin autorización Open Finance, la prima incluye un recargo."
+  },
+  "pago": {
+    "titulo": "Confirma tu pago",
+    "resumen": "Resumen de tu compra",
+    "metodoPago": "Método de pago",
+    "confirmar": "Confirmar pago",
+    "procesando": "Procesando tu pago…",
+    "errorPago": "No pudimos procesar el pago. Intenta de nuevo."
+  },
+  "firma": {
+    "titulo": "Firma tu póliza",
+    "instruccion": "Dibuja tu firma para completar la contratación.",
+    "firmar": "Firmar",
+    "limpiar": "Borrar firma"
+  },
+  "certificado": {
+    "titulo": "¡Tu póliza está activa!",
+    "mensaje": "Emitimos tu certificado. Ya puedes descargarlo desde tu billetera.",
+    "descargar": "Descargar certificado",
+    "irABilletera": "Ir a mi billetera"
+  },
+  "billetera": {
+    "titulo": "Mi billetera",
+    "sinPolizas": "Todavía no tienes pólizas activas.",
+    "verDetalle": "Ver detalle",
+    "sinConexion": "Estás sin conexión: se muestra información parcial guardada en tu dispositivo."
+  },
+  "detallePoliza": {
+    "titulo": "Detalle de la póliza",
+    "numero": "Número de póliza",
+    "vigenciaDesde": "Vigente desde",
+    "vigenciaHasta": "Vigente hasta",
+    "coberturas": "Coberturas",
+    "descargarCertificado": "Descargar certificado"
+  },
+  "notificaciones": {
+    "titulo": "Notificaciones",
+    "sinNotificaciones": "No tienes notificaciones por ahora.",
+    "certificado": {
+      "titulo": "Tu póliza {numero} ya está disponible",
+      "cuerpo": "Descarga tu certificado desde la billetera cuando quieras."
+    },
+    "pagoParametrico": {
+      "titulo": "Recibiste un pago por {evento}",
+      "cuerpo": "Depositamos {monto} {moneda} en tu cuenta por la póliza {numero}."
+    }
+  },
+  "ajustes": {
+    "titulo": "Ajustes",
+    "idioma": "Idioma",
+    "region": "País",
+    "tamanoTexto": "Tamaño de texto",
+    "tamanoNormal": "Normal",
+    "tamanoGrande": "Grande",
+    "cerrarSesion": "Cerrar sesión"
+  },
+  "documento": {
+    "cedula": "Cédula de ciudadanía",
+    "curp": "CURP"
+  },
+  "seguros": {
+    "viaje": "Seguro de viaje",
+    "dispositivos": "Seguro de dispositivos",
+    "vida": "Seguro de vida",
+    "desempleo": "Seguro de desempleo"
+  },
+  "errores": {
+    "generico": "Algo salió mal. Intenta de nuevo.",
+    "sinConexion": "No hay conexión a internet.",
+    "campoObligatorio": "Este campo es obligatorio.",
+    "documentoInvalido": "El número de documento no es válido."
+  },
+  "depuracion": {
+    "titulo": "Panel de depuración",
+    "sinConexion": "Simular sin conexión",
+    "forzarFalloKyc": "Forzar fallo de verificación",
+    "forzarFalloPago": "Forzar fallo de pago",
+    "textosLargos": "Textos largos (pseudo-localización)",
+    "reiniciarSesion": "Reiniciar sesión de prueba"
+  }
+}

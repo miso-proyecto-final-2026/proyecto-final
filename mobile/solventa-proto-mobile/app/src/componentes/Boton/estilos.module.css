@@ -1,0 +1,101 @@
+.boton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  min-height: var(--alto-tactil);
+  border-radius: var(--radio-m);
+  border: 1px solid transparent;
+  font-family: var(--fuente);
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.boton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.anchoCompleto {
+  width: 100%;
+}
+
+/* --- Tamanos -------------------------------------------------------------
+ * La altura minima (--alto-tactil) es igual en ambos: "compacto" reduce el
+ * relleno horizontal y el tamano de letra, nunca el area tactil. */
+.normal {
+  padding: 0 var(--esp-5);
+  font-size: var(--texto-m);
+}
+
+.compacto {
+  padding: 0 var(--esp-3);
+  font-size: var(--texto-s);
+}
+
+/* --- Variantes ------------------------------------------------------------ */
+.primario {
+  background: var(--color-primario);
+  color: var(--color-superficie);
+}
+.primario:not(:disabled):active {
+  background: var(--color-primario-oscuro);
+}
+
+.secundario {
+  background: var(--color-superficie);
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+}
+.secundario:not(:disabled):active {
+  background: var(--color-primario-suave);
+}
+
+.texto {
+  background: transparent;
+  color: var(--color-primario);
+}
+.texto:not(:disabled):active {
+  background: var(--color-primario-suave);
+}
+
+.peligro {
+  background: var(--color-error);
+  color: var(--color-superficie);
+}
+.peligro:not(:disabled):active {
+  /* No hay un tono "oscuro" de error en variables.css: se deriva con
+   * filter en vez de inventar un color nuevo. */
+  filter: brightness(0.9);
+}
+
+/* --- Estado de carga -------------------------------------------------------
+ * opacity (no visibility/display) para que el boton conserve su ancho y,
+ * cuando no hay etiquetaAccesible, el texto siga siendo el nombre accesible
+ * del boton mientras carga. */
+.contenidoOculto {
+  opacity: 0;
+}
+
+.spinner {
+  position: absolute;
+  width: var(--esp-4);
+  height: var(--esp-4);
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-right-color: currentColor;
+  border-radius: 50%;
+  animation: girar 0.6s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
