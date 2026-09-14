@@ -25,12 +25,20 @@ export const puedeEntrarConBiometria = (estado) =>
 /** H37 es libre: cotizar no requiere identidad verificada. */
 export const puedeCotizar = (estado) => !estado.debug.sinConexion;
 
-/** H17 requiere una cotización lista Y identidad verificada. */
+/** H17 requiere una cotización lista (no invalidada) Y identidad verificada. */
 export const puedeComprar = (estado) =>
   !!estado.cotizacion &&
   estado.cotizacion.estado === ESTADOS_COTIZACION.LISTA &&
+  estado.cotizacion.estado !== ESTADOS_COTIZACION.INVALIDADA &&
   !estado.debug.sinConexion &&
   kycAprobado(estado);
+
+/** H07 · la cotizacion vigente quedo invalidada al revocar el consentimiento. */
+export const cotizacionInvalidada = (estado) =>
+  !!estado.cotizacion && estado.cotizacion.estado === ESTADOS_COTIZACION.INVALIDADA;
+
+// TODO: cuando exista la pantalla de Cotizacion, debe mostrar el estado
+// INVALIDADA con su propia marca visual (no solo bloquear la compra).
 
 /** No hay verificación aprobada todavía (no iniciada, en curso o rechazada). */
 export const necesitaVerificacion = (estado) =>
@@ -41,6 +49,18 @@ export const verificacionEnCurso = (estado) =>
 
 export const verificacionRechazada = (estado) =>
   estado.usuario.estadoKyc === ESTADOS_KYC.RECHAZADO;
+
+export const consentimientoVigente = (estado) => estado.consentimiento.otorgado === true;
+
+export const entidadesConectadas = (estado) => estado.consentimiento.entidades;
+
+export const totalEntidadesConectadas = (estado) => estado.consentimiento.entidades.length;
+
+/** Las entidades de la region que todavia NO estan conectadas. */
+export const entidadesDisponibles = (estado, entidadesRegion) => {
+  const codigosConectados = estado.consentimiento.entidades.map((e) => e.codigo);
+  return entidadesRegion.filter((e) => !codigosConectados.includes(e.codigo));
+};
 
 /** Pólizas pendientes de firma (H21). */
 export const polizasSinFirmar = (estado) => estado.polizas.filter((p) => !p.firmada);

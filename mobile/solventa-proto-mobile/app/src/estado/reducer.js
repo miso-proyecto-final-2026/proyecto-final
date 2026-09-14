@@ -3,7 +3,6 @@ import {
   ESTADOS_KYC,
   ESTADOS_COTIZACION,
   TIPOS_NOTIFICACION,
-  RECARGO_SIN_CONSENTIMIENTO,
 } from './estadoInicial';
 import { ACCIONES } from './acciones';
 
@@ -22,24 +21,40 @@ let contador = 0;
 const nuevoId = (prefijo) => `${prefijo}_${Date.now()}_${++contador}`;
 const ahora = () => new Date().toISOString();
 
-/** Aplica el recargo cuando no hay consentimiento (regla H06 <-> H07 <-> H37). */
-function recalcularPrima(cotizacion, hayConsentimiento) {
-  if (!cotizacion || cotizacion.primaBase == null) return cotizacion;
-  return {
-    ...cotizacion,
-    personalizada: hayConsentimiento,
-    prima: hayConsentimiento
-      ? cotizacion.primaBase
-      : Math.round(cotizacion.primaBase * RECARGO_SIN_CONSENTIMIENTO),
-  };
-}
-
 /** Bloquea una acción y avisa en consola. Útil al generar pantallas. */
 function bloquear(estado, motivo) {
   if (process.env.NODE_ENV !== 'production') {
     console.warn(`[estado] Acción bloqueada: ${motivo}`);
   }
   return estado;
+}
+
+/**
+ * Cuerpo compartido de "revocar el consentimiento" (H07): lo usan tanto
+ * REVOCAR_CONSENTIMIENTO como DESCONECTAR_ENTIDAD cuando se desconecta la
+ * ultima entidad conectada. Si la cotizacion vigente se calculo CON
+ * consentimiento (personalizada), queda invalidada: prima, primaBase y
+ * coberturas se conservan tal cual, para que se vea que esa oferta existio.
+ */
+function revocarConsentimientoEstado(estado) {
+  const cotizacion =
+    estado.cotizacion && estado.cotizacion.personalizada
+      ? {
+          ...estado.cotizacion,
+          estado: ESTADOS_COTIZACION.INVALIDADA,
+          motivoInvalidacion: 'consentimiento_revocado',
+        }
+      : estado.cotizacion;
+  return {
+    ...estado,
+    consentimiento: {
+      otorgado: false,
+      entidades: [],
+      fechaOtorgamiento: estado.consentimiento.fechaOtorgamiento,
+      fechaRevocacion: ahora(),
+    },
+    cotizacion,
+  };
 }
 
 export function reducer(estado, accion) {
@@ -137,14 +152,16 @@ export function reducer(estado, accion) {
     case ACCIONES.OTORGAR_CONSENTIMIENTO: {
       const consentimiento = {
         otorgado: true,
+        entidades: [{ ...accion.entidad, fechaConexion: ahora() }],
         fechaOtorgamiento: ahora(),
         fechaRevocacion: null,
       };
+      // La cotizacion queda intacta, incluso si estaba invalidada: otorgar
+      // de nuevo NO revive una cotizacion invalidada. Hay que volver a
+      // cotizar.
       return {
         ...estado,
         consentimiento,
-        // Si ya había una cotización, se vuelve personalizada y baja la prima.
-        cotizacion: recalcularPrima(estado.cotizacion, true),
       };
     }
 
@@ -155,14 +172,43 @@ export function reducer(estado, accion) {
       if (!estado.consentimiento.otorgado) {
         return bloquear(estado, 'H07 requiere H06: no hay consentimiento vigente.');
       }
+      return revocarConsentimientoEstado(estado);
+    }
+
+    // Conectar una entidad adicional (varias fuentes -> oferta mas precisa).
+    // No toca la cotizacion: sumar una fuente no la invalida.
+    case ACCIONES.CONECTAR_ENTIDAD: {
+      if (!estado.consentimiento.otorgado) {
+        return bloquear(estado, 'CONECTAR_ENTIDAD requiere consentimiento vigente (H06).');
+      }
+      const yaConectada = estado.consentimiento.entidades.some(
+        (e) => e.codigo === accion.entidad.codigo
+      );
+      if (yaConectada) return estado;
       return {
         ...estado,
         consentimiento: {
-          otorgado: false,
-          fechaOtorgamiento: estado.consentimiento.fechaOtorgamiento,
-          fechaRevocacion: ahora(),
+          ...estado.consentimiento,
+          entidades: [
+            ...estado.consentimiento.entidades,
+            { ...accion.entidad, fechaConexion: ahora() },
+          ],
         },
-        cotizacion: recalcularPrima(estado.cotizacion, false),
+      };
+    }
+
+    // Desconectar una entidad. Si era la ultima, equivale a revocar el
+    // consentimiento completo (mismo cuerpo que REVOCAR_CONSENTIMIENTO).
+    case ACCIONES.DESCONECTAR_ENTIDAD: {
+      const restantes = estado.consentimiento.entidades.filter(
+        (e) => e.codigo !== accion.codigo
+      );
+      if (restantes.length === 0) {
+        return revocarConsentimientoEstado(estado);
+      }
+      return {
+        ...estado,
+        consentimiento: { ...estado.consentimiento, entidades: restantes },
       };
     }
 
@@ -190,16 +236,17 @@ export function reducer(estado, accion) {
 
     case ACCIONES.RECIBIR_COTIZACION: {
       if (!estado.cotizacion) return estado;
-      const base = {
-        ...estado.cotizacion,
-        primaBase: accion.resultado.primaBase,
-        moneda: accion.resultado.moneda,
-        coberturas: accion.resultado.coberturas,
-        estado: ESTADOS_COTIZACION.LISTA,
-      };
       return {
         ...estado,
-        cotizacion: recalcularPrima(base, estado.consentimiento.otorgado),
+        cotizacion: {
+          ...estado.cotizacion,
+          primaBase: accion.resultado.primaBase,
+          prima: accion.resultado.primaBase,
+          moneda: accion.resultado.moneda,
+          coberturas: accion.resultado.coberturas,
+          personalizada: estado.consentimiento.otorgado,
+          estado: ESTADOS_COTIZACION.LISTA,
+        },
       };
     }
 
@@ -222,6 +269,15 @@ export function reducer(estado, accion) {
     // =====================================================================
     case ACCIONES.CONFIRMAR_PAGO: {
       const cot = estado.cotizacion;
+      // El chequeo de INVALIDADA va antes que el generico de "lista", para
+      // que el motivo de bloqueo sea especifico (invalidada por revocar el
+      // consentimiento) en vez del generico de "todavia no esta lista".
+      if (cot && cot.estado === ESTADOS_COTIZACION.INVALIDADA) {
+        return bloquear(
+          estado,
+          'H17 bloqueado: la cotización fue invalidada al revocar el consentimiento.'
+        );
+      }
       if (!cot || cot.estado !== ESTADOS_COTIZACION.LISTA) {
         return bloquear(estado, 'H17 requiere una cotización lista (H37).');
       }

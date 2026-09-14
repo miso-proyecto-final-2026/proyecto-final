@@ -29,7 +29,7 @@
 .textoPaso {
   margin: 0;
   color: var(--color-texto-secundario);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
   font-weight: 600;
 }

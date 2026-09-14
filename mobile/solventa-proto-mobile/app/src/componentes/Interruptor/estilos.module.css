@@ -1,0 +1,90 @@
+.interruptor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  width: 100%;
+  min-height: var(--alto-tactil);
+  padding: var(--esp-2) 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--fuente-cuerpo);
+}
+
+.interruptor:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.texto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+
+.etiqueta {
+  color: var(--color-texto);
+  font-size: var(--texto-m);
+  font-weight: 600;
+}
+
+.descripcion {
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-s);
+}
+
+.control {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+}
+
+/* 44x24: --alto-tactil y --esp-5 calzan exacto, sin literales. */
+.pista {
+  position: relative;
+  width: var(--alto-tactil);
+  height: var(--esp-5);
+  border-radius: var(--radio-l);
+  background: var(--color-borde);
+  transition: background-color 150ms ease;
+}
+
+.pistaActiva {
+  background: var(--color-primario);
+}
+
+.perilla {
+  position: absolute;
+  top: 50%;
+  left: var(--esp-1);
+  width: calc(var(--esp-5) - var(--esp-1));
+  height: calc(var(--esp-5) - var(--esp-1));
+  border-radius: 50%;
+  background: var(--color-superficie);
+  transform: translateY(-50%);
+  transition: transform 150ms ease;
+}
+
+.pistaActiva .perilla {
+  transform: translateY(-50%)
+    translateX(calc(var(--alto-tactil) - var(--esp-5) - var(--esp-1)));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pista,
+  .perilla {
+    transition: none;
+  }
+}
+
+.iconoEstado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--esp-5);
+  color: var(--color-exito);
+}

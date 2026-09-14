@@ -12,6 +12,14 @@ const MX = {
     { valor: 'PA', claveEtiqueta: 'documento.pasaporte', ejemplo: 'G12345678' },
   ],
   ciudades: ['Ciudad de Mexico', 'Guadalajara', 'Monterrey', 'Puebla', 'Merida'],
+  // Marcas reales usadas solo como referencia visual en un prototipo
+  // academico: nada de logos ni imagenes, solo el nombre en texto.
+  entidades: [
+    { codigo: 'bbva_mx', nombre: 'BBVA Mexico' },
+    { codigo: 'banorte', nombre: 'Banorte' },
+    { codigo: 'santander', nombre: 'Santander Mexico' },
+    { codigo: 'nu_mx', nombre: 'Nu Mexico' },
+  ],
   telefono: {
     prefijo: '+52',
     patron: /^\d{10}$/,

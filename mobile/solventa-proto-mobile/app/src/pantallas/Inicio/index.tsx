@@ -5,6 +5,7 @@ import Tarjeta from '../../componentes/Tarjeta';
 import { useDispatch, useEstado } from '../../estado/StoreProvider';
 import { cerrarSesion } from '../../estado/acciones';
 import {
+  cotizacionInvalidada,
   necesitaVerificacion,
   polizasSinFirmar,
   puedeCotizar,
@@ -131,6 +132,19 @@ export default function Inicio() {
             }
           >
             {t('inicio.kycPendiente')}
+          </Aviso>
+        )}
+
+        {cotizacionInvalidada(estado) && (
+          <Aviso
+            tono="advertencia"
+            accion={
+              <Boton tamano="compacto" onClick={() => navigate('/cotizacion')}>
+                {t('inicio.cotizarDeNuevo')}
+              </Boton>
+            }
+          >
+            {t('inicio.cotizacionInvalidada')}
           </Aviso>
         )}
       </div>

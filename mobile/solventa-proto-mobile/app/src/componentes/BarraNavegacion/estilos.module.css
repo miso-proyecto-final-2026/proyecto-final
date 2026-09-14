@@ -3,11 +3,21 @@
    * dentro de <main> (ver app/routes/app.tsx), asi que esa custom property
    * si le llega por herencia normal de CSS. */
   height: var(--alto-barra);
-  flex-shrink: 0;
   display: flex;
   padding-bottom: env(safe-area-inset-bottom);
   background: var(--color-superficie);
   border-top: 1px solid var(--color-borde);
+  /* Ancla al marco del telefono (.marco en MarcoMovil, el ancestro
+   * posicionado mas cercano), no a <main>. Con esto queda fija abajo pase
+   * lo que pase con el contenido: pantallas cortas (como los stubs sin
+   * implementar todavia) no la empujan hacia arriba, ni pantallas largas
+   * la arrastran al hacer scroll. El padding-bottom de .contenido en
+   * MarcoMovil ya reserva el espacio para que no tape el ultimo elemento. */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
 }
 
 .destino {
@@ -19,7 +29,7 @@
   gap: var(--esp-1);
   color: var(--color-texto-secundario);
   text-decoration: none;
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
 }
 
 .activo {
@@ -48,7 +58,7 @@
   border-radius: var(--radio-l);
   background: var(--color-error);
   color: var(--color-superficie);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: calc(var(--texto-s) * 0.8);
   font-weight: 700;
   line-height: 1;

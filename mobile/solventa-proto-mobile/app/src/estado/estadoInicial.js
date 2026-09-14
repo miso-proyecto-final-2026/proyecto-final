@@ -6,9 +6,6 @@
  * respondido (prima, coberturas, certificado...).
  */
 
-/** Recargo aplicado a la prima cuando NO hay consentimiento Open Finance (H06/H07). */
-export const RECARGO_SIN_CONSENTIMIENTO = 1.18;
-
 /** Estados posibles del proceso de verificación de identidad (H02, H03). */
 export const ESTADOS_KYC = {
   NO_INICIADO: 'no_iniciado',
@@ -22,6 +19,7 @@ export const ESTADOS_COTIZACION = {
   CALCULANDO: 'calculando',
   LISTA: 'lista',
   ERROR: 'error',
+  INVALIDADA: 'invalidada',
 };
 
 /** Tipos de notificación (H22, H30). */
@@ -56,6 +54,7 @@ export const estadoInicial = {
   // --- H06, H07 -----------------------------------------------------------
   consentimiento: {
     otorgado: false,
+    entidades: [], // [{ codigo, nombre, fechaConexion }]
     fechaOtorgamiento: null,
     fechaRevocacion: null,
   },

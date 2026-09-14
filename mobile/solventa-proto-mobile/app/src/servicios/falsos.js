@@ -39,3 +39,14 @@ export async function verificarIdentidad(debug) {
   if (debug.forzarFalloKyc) return { ok: false, motivo: 'documento_ilegible' };
   return { ok: true };
 }
+
+/**
+ * Simula la conexion con Open Finance (H06) contra la entidad elegida.
+ * No hay bandera de fallo propia: la unica forma de que falle en este
+ * prototipo es sin conexion.
+ */
+export async function conectarOpenFinance(debug, entidad) {
+  await esperar(debug.latenciaMs * 2);
+  if (debug.sinConexion) return { ok: false, motivo: 'sin_conexion' };
+  return { ok: true, datos: { entidad } };
+}

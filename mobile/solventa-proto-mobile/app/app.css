@@ -19,11 +19,25 @@ body {
   height: 100dvh;
 }
 
-html,
+/* Esquema "Mutual": tipografia institucional. Sentence case en toda la
+ * app, nunca mayusculas para titulos. */
 body {
-  @apply bg-white dark:bg-gray-950;
+  font-family: var(--fuente-cuerpo);
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  line-height: var(--interlinea-cuerpo);
+}
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+h1,
+h2 {
+  font-family: var(--fuente-titulo);
+  font-weight: 500;
+  line-height: var(--interlinea-titulo);
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--fuente-cuerpo);
 }

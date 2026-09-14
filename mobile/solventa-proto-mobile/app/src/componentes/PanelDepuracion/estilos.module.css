@@ -41,8 +41,9 @@
   display: flex;
   flex-direction: column;
   background: var(--color-superficie);
-  box-shadow: calc(var(--esp-1) * -1) 0 var(--esp-4)
-    color-mix(in srgb, var(--color-texto) 25%, transparent);
+  /* Excepcion explicita: la hoja del panel conserva sombra (es una
+   * herramienta flotante, no una superficie del producto). */
+  box-shadow: calc(var(--esp-1) * -1) 0 var(--esp-4) rgba(26, 26, 26, 0.12);
   z-index: 9998;
   animation: deslizarDesdeDerecha 200ms ease-out;
 }
@@ -60,7 +61,7 @@
 .tituloPanel {
   margin: 0;
   color: var(--color-texto);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-m);
   font-weight: 700;
 }
@@ -68,7 +69,7 @@
 .leyenda {
   margin: var(--esp-1) 0 0;
   color: var(--color-texto-secundario);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
 }
 
@@ -95,14 +96,15 @@
   border-top: none;
 }
 
+/* Sentence case, no mayusculas (regla de toda la app): el peso y el
+ * espaciado de letras ya distinguen el titulo de seccion sin gritar. */
 .tituloSeccion {
   margin: 0;
   color: var(--color-texto-secundario);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
 }
 
 .listaEstado {
@@ -116,7 +118,7 @@
   display: flex;
   justify-content: space-between;
   gap: var(--esp-2);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
 }
 
@@ -134,14 +136,14 @@
 .notaPequena {
   margin: 0;
   color: var(--color-texto-secundario);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
 }
 
 .avisoRegion {
   margin: 0;
   color: var(--color-advertencia);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
 }
 
@@ -157,7 +159,7 @@
 .confirmacion p {
   margin: 0;
   color: var(--color-texto);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
 }
 
@@ -191,7 +193,7 @@
   border: none;
   background: transparent;
   color: var(--color-texto);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
   cursor: pointer;
   text-align: left;
@@ -227,7 +229,7 @@
 }
 
 .estadoCompleto {
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
   color: var(--color-texto);
 }

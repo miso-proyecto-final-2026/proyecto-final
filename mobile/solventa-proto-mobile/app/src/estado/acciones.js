@@ -21,6 +21,8 @@ export const ACCIONES = {
   // Consentimiento Open Finance (H06, H07)
   OTORGAR_CONSENTIMIENTO: 'OTORGAR_CONSENTIMIENTO',
   REVOCAR_CONSENTIMIENTO: 'REVOCAR_CONSENTIMIENTO',
+  CONECTAR_ENTIDAD: 'CONECTAR_ENTIDAD',
+  DESCONECTAR_ENTIDAD: 'DESCONECTAR_ENTIDAD',
 
   // Cotización (H37)
   SOLICITAR_COTIZACION: 'SOLICITAR_COTIZACION',
@@ -71,8 +73,20 @@ export const desactivarBiometria = () => ({ type: ACCIONES.DESACTIVAR_BIOMETRIA 
 export const iniciarSesion = () => ({ type: ACCIONES.INICIAR_SESION });
 export const cerrarSesion = () => ({ type: ACCIONES.CERRAR_SESION });
 
-export const otorgarConsentimiento = () => ({ type: ACCIONES.OTORGAR_CONSENTIMIENTO });
+export const otorgarConsentimiento = (entidad) => ({
+  type: ACCIONES.OTORGAR_CONSENTIMIENTO,
+  entidad, // { codigo, nombre }
+});
 export const revocarConsentimiento = () => ({ type: ACCIONES.REVOCAR_CONSENTIMIENTO });
+
+export const conectarEntidad = (entidad) => ({
+  type: ACCIONES.CONECTAR_ENTIDAD,
+  entidad, // { codigo, nombre }
+});
+export const desconectarEntidad = (codigo) => ({
+  type: ACCIONES.DESCONECTAR_ENTIDAD,
+  codigo,
+});
 
 export const solicitarCotizacion = (tipoSeguro, parametros) => ({
   type: ACCIONES.SOLICITAR_COTIZACION,

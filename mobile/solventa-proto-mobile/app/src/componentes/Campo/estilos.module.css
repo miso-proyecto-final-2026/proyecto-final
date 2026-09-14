@@ -5,7 +5,7 @@
 }
 
 .etiqueta {
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
   font-weight: 600;
   color: var(--color-texto);
@@ -36,7 +36,7 @@
   border-radius: var(--radio-s);
   background: var(--color-superficie);
   color: var(--color-texto);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-m);
 }
 
@@ -76,14 +76,14 @@
 .ayuda {
   margin: 0;
   color: var(--color-texto-secundario);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
 }
 
 .error {
   margin: 0;
   color: var(--color-error);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
   font-weight: 600;
 }

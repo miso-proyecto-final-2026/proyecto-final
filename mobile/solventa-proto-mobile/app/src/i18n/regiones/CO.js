@@ -13,6 +13,14 @@ const CO = {
     { valor: 'PA', claveEtiqueta: 'documento.pasaporte', ejemplo: 'AN123456' },
   ],
   ciudades: ['Bogota', 'Medellin', 'Cali', 'Barranquilla', 'Bucaramanga'],
+  // Marcas reales usadas solo como referencia visual en un prototipo
+  // academico: nada de logos ni imagenes, solo el nombre en texto.
+  entidades: [
+    { codigo: 'bancolombia', nombre: 'Bancolombia' },
+    { codigo: 'davivienda', nombre: 'Davivienda' },
+    { codigo: 'bbva_co', nombre: 'BBVA Colombia' },
+    { codigo: 'nequi', nombre: 'Nequi' },
+  ],
   telefono: {
     prefijo: '+57',
     patron: /^\d{10}$/,

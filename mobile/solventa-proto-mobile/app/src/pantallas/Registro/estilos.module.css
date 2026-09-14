@@ -10,9 +10,9 @@
 .titulo {
   margin: 0;
   color: var(--color-texto);
-  font-family: var(--fuente);
+  font-family: var(--fuente-titulo);
   font-size: var(--texto-titulo);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .campos {
@@ -38,7 +38,7 @@
   align-items: center;
   gap: var(--esp-2);
   min-height: var(--alto-tactil);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
   color: var(--color-texto);
   cursor: pointer;
@@ -58,14 +58,14 @@
   border-radius: var(--radio-m);
   background: var(--color-superficie);
   color: var(--color-texto-secundario);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
 }
 
 .debeAceptar {
   margin: 0;
   color: var(--color-error);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
   font-weight: 600;
 }
@@ -77,7 +77,7 @@
   gap: var(--esp-1);
   margin-top: auto;
   padding-top: var(--esp-5);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
   color: var(--color-texto-secundario);
 }
@@ -94,7 +94,7 @@
 .confirmarSalida p {
   margin: 0;
   color: var(--color-texto);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
 }
 

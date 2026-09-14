@@ -15,15 +15,15 @@
 .titulo {
   margin: 0;
   color: var(--color-texto);
-  font-family: var(--fuente);
+  font-family: var(--fuente-titulo);
   font-size: var(--texto-titulo);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .subtitulo {
   margin: 0;
   color: var(--color-texto-secundario);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-l);
 }
 
@@ -35,7 +35,7 @@
   align-items: center;
   gap: var(--esp-3);
   color: var(--color-texto-secundario);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
 }
 
@@ -59,7 +59,7 @@
   border-radius: var(--radio-s);
   background: var(--color-primario-suave);
   color: var(--color-texto);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
 }
 
@@ -70,6 +70,6 @@
   gap: var(--esp-2);
   margin-top: auto;
   color: var(--color-texto-secundario);
-  font-family: var(--fuente);
+  font-family: var(--fuente-cuerpo);
   font-size: var(--texto-s);
 }

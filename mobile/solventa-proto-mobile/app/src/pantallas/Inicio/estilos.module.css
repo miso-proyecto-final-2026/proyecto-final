@@ -9,9 +9,9 @@
 .saludo {
   margin: 0;
   color: var(--color-texto);
-  font-family: var(--fuente);
+  font-family: var(--fuente-titulo);
   font-size: var(--texto-titulo);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .avisos {

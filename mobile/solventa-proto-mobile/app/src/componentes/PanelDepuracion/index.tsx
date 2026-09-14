@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import Boton from '../Boton';
+import Interruptor from '../Interruptor';
 import { useDispatch, useEstado } from '../../estado/StoreProvider';
 import {
   alternarDebug,
   cambiarIdioma,
   cambiarRegion,
+  conectarEntidad,
   confirmarPago,
   emitirCertificado,
   establecerDebug,
@@ -26,36 +28,6 @@ const OPCIONES_LATENCIA = [
   { etiqueta: 'Normal (1200)', valor: 1200 },
   { etiqueta: 'Lenta (4000)', valor: 4000 },
 ];
-
-/** Interruptor local: es UI exclusiva de este panel, no un componente del producto. */
-function Interruptor({
-  etiqueta,
-  activo,
-  onClick,
-}: {
-  etiqueta: string;
-  activo: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={activo}
-      className={styles.interruptor}
-      onClick={onClick}
-    >
-      <span>{etiqueta}</span>
-      <span
-        className={[styles.pista, activo ? styles.pistaActiva : '']
-          .filter(Boolean)
-          .join(' ')}
-      >
-        <span className={styles.perilla} />
-      </span>
-    </button>
-  );
-}
 
 /**
  * Panel de depuración: herramienta interna para el equipo, no parte del
@@ -138,12 +110,37 @@ export default function PanelDepuracion() {
 
   function clienteConConsentimiento() {
     clienteVerificado();
-    dispatch(otorgarConsentimiento());
+    const entidadDemo = region.entidades[0];
+    dispatch(otorgarConsentimiento({ codigo: entidadDemo.codigo, nombre: entidadDemo.nombre }));
+  }
+
+  // Cotiza pero NO compra: a diferencia de "Cliente con poliza", deja la
+  // cotizacion viva (estado LISTA) para poder probar que pasa cuando se
+  // revoca el consentimiento con una cotizacion personalizada pendiente.
+  function clienteConCotizacionViva() {
+    clienteConConsentimiento();
+    dispatch(solicitarCotizacion('viaje', { dias: 10, destino: 'Europa' }));
+    const ramoViaje = region.catalogo.find((item) => item.clave === 'viaje');
+    dispatch(
+      recibirCotizacion({
+        primaBase: ramoViaje ? ramoViaje.primaBase : 0,
+        moneda: region.moneda,
+        coberturas: ['cancelacion', 'asistencia_medica', 'equipaje'],
+      })
+    );
   }
 
   function clienteConPoliza() {
     saltoEnCursoRef.current = true;
     clienteConConsentimiento();
+    // Segunda entidad conectada: para que este caso sirva de prueba con
+    // varias entidades conectadas a la vez.
+    const segundaEntidad = region.entidades[1];
+    if (segundaEntidad) {
+      dispatch(
+        conectarEntidad({ codigo: segundaEntidad.codigo, nombre: segundaEntidad.nombre })
+      );
+    }
     dispatch(solicitarCotizacion('viaje', { dias: 10, destino: 'Europa' }));
     const ramoViaje = region.catalogo.find((item) => item.clave === 'viaje');
     dispatch(
@@ -240,7 +237,11 @@ export default function PanelDepuracion() {
                 </div>
                 <div className={styles.filaEstado}>
                   <dt>Consentimiento</dt>
-                  <dd>{estado.consentimiento.otorgado ? 'otorgado' : 'no otorgado'}</dd>
+                  <dd>
+                    {estado.consentimiento.otorgado
+                      ? `otorgado (${estado.consentimiento.entidades.length} entidad${estado.consentimiento.entidades.length === 1 ? '' : 'es'})`
+                      : 'no otorgado'}
+                  </dd>
                 </div>
                 <div className={styles.filaEstado}>
                   <dt>Cotización</dt>
@@ -315,6 +316,13 @@ export default function PanelDepuracion() {
                   onClick={clienteConConsentimiento}
                 >
                   Cliente con consentimiento
+                </Boton>
+                <Boton
+                  variante="secundario"
+                  anchoCompleto
+                  onClick={clienteConCotizacionViva}
+                >
+                  Cliente con cotización viva
                 </Boton>
                 <Boton variante="secundario" anchoCompleto onClick={clienteConPoliza}>
                   Cliente con póliza
@@ -391,24 +399,28 @@ export default function PanelDepuracion() {
             <section className={styles.seccion}>
               <h3 className={styles.tituloSeccion}>Banderas</h3>
               <Interruptor
+                id="depuracion-sin-conexion"
                 etiqueta="Sin conexión"
                 activo={estado.debug.sinConexion}
-                onClick={() => dispatch(alternarDebug('sinConexion'))}
+                onChange={() => dispatch(alternarDebug('sinConexion'))}
               />
               <Interruptor
+                id="depuracion-forzar-fallo-kyc"
                 etiqueta="Forzar fallo de KYC"
                 activo={estado.debug.forzarFalloKyc}
-                onClick={() => dispatch(alternarDebug('forzarFalloKyc'))}
+                onChange={() => dispatch(alternarDebug('forzarFalloKyc'))}
               />
               <Interruptor
+                id="depuracion-forzar-fallo-pago"
                 etiqueta="Forzar fallo de pago"
                 activo={estado.debug.forzarFalloPago}
-                onClick={() => dispatch(alternarDebug('forzarFalloPago'))}
+                onChange={() => dispatch(alternarDebug('forzarFalloPago'))}
               />
               <Interruptor
+                id="depuracion-textos-largos"
                 etiqueta="Textos largos"
                 activo={estado.debug.textosLargos}
-                onClick={() => dispatch(alternarDebug('textosLargos'))}
+                onChange={() => dispatch(alternarDebug('textosLargos'))}
               />
             </section>
 
