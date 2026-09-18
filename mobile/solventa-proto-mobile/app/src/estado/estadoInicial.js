@@ -20,7 +20,13 @@ export const ESTADOS_COTIZACION = {
   LISTA: 'lista',
   ERROR: 'error',
   INVALIDADA: 'invalidada',
+  // Derivado: una cotizacion LISTA cuya vigenciaHasta ya paso. Nunca se
+  // guarda en el estado; lo resuelven los selectores (ver selectores.js).
+  VENCIDA: 'vencida',
 };
+
+/** Dias que dura vigente una cotizacion desde que se crea. */
+export const DIAS_VIGENCIA_COTIZACION = 15;
 
 /** Tipos de notificación (H22, H30). */
 export const TIPOS_NOTIFICACION = {
@@ -60,10 +66,14 @@ export const estadoInicial = {
   },
 
   // --- H37 ----------------------------------------------------------------
-  // null = el usuario todavía no ha cotizado.
-  // { id, tipoSeguro, parametros, primaBase, prima, moneda,
-  //   coberturas: [], personalizada, estado }
-  cotizacion: null,
+  // Historial de cotizaciones, las mas recientes primero. Cada una:
+  // { id, tipoSeguro, parametros, primaBase, prima, moneda, coberturas: [],
+  //   personalizada, estimada, estado, motivoError, motivoInvalidacion,
+  //   fechaCreacion, vigenciaHasta }
+  cotizaciones: [],
+  // Id de la cotizacion sobre la que se esta trabajando (la que se ve en el
+  // resultado y la que se paga), o null.
+  cotizacionActivaId: null,
 
   // --- H17, H21, H22, H35, H36 -------------------------------------------
   // { id, numero, tipo, prima, moneda, coberturas: [],

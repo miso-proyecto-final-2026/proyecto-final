@@ -151,7 +151,8 @@
     "revocar": "Revoke authorization",
     "confirmarTitulo": "Revoke the authorization?",
     "confirmarDetalle": "We'll stop using your financial information. Your next quotes won't be personalized anymore.",
-    "avisoCotizacionVigente": "Your current quote will no longer be valid.",
+    "avisoCotizacionVigente": "Your current firm quote will no longer be valid.",
+    "avisoCotizacionesVigentes": "Your {cantidad} current firm quotes will no longer be valid.",
     "confirmarRevocar": "Yes, revoke",
     "desconectarTitulo": "Disconnect this institution?",
     "desconectarDetalle": "We'll stop using data from {entidad}. Your other connected institutions stay active.",
@@ -159,7 +160,8 @@
     "ultimaEntidadTitulo": "Disconnect your only institution?",
     "ultimaEntidadDetalle": "This is the last connected institution: removing it revokes the whole authorization.",
     "revocadoExito": "Authorization revoked on {fecha}.",
-    "sinConexion": "You're offline: you can't connect or revoke the authorization right now."
+    "sinConexion": "You're offline: you can't connect or revoke the authorization right now.",
+    "volverACotizar": "Back to my quote"
   },
   "inicio": {
     "saludo": "Welcome, {nombre}",
@@ -172,7 +174,7 @@
     "kycRechazado": "We couldn't verify your identity. You can try again.",
     "reintentarKyc": "Retry verification",
     "cotizarTitulo": "Quote insurance",
-    "cotizarDescripcion": "Pick an insurance type and build your quote in minutes.",
+    "cotizarDescripcion": "Review your quotes or build a new one in minutes.",
     "polizasTitulo": "My policies",
     "polizasDescripcion": "Check your active policies and their certificates.",
     "consentimientoTitulo": "Financial data",
@@ -184,43 +186,166 @@
     "bloqueoSinConexion": "Not available offline.",
     "bloqueoRequiereKyc": "You need to verify your identity first.",
     "cotizacionInvalidada": "Your quote is no longer valid: the conditions it was calculated with have changed. You can generate a new one.",
-    "cotizarDeNuevo": "Quote again",
+    "verCotizaciones": "View quotes",
     "cerrarSesion": "Sign out"
   },
   "cotizacion": {
-    "titulo": "Quote your insurance",
-    "tipoSeguro": "Insurance type",
+    "titulo": "What would you like to quote?",
+    "sinConexion": "You're offline: you can't calculate a quote right now.",
     "calcular": "Calculate premium",
     "calculando": "Calculating your premium…",
-    "errorCalculo": "We couldn't calculate your quote. Please try again."
+    "rango": "Between {min} and {max}",
+    "monedaAyuda": "Amount in {moneda}",
+    "compartirTitulo": "We'll use your data to quote",
+    "compartirDetalle": "To calculate your price we'll share the financial data you authorized with these institutions:",
+    "compartirRevocar": "You can revoke this authorization at any time from the consent section.",
+    "compartirAceptar": "Accept and calculate",
+    "estimadaTitulo": "We'll show you an estimated price",
+    "estimadaDetalle": "Without using your financial data we calculate an estimated price, and the final amount may vary. You can continue this way; authorizing the use of your data is optional and you can do it whenever you want.",
+    "continuarEstimada": "Continue with estimated price",
+    "irAutorizar": "Authorize my data",
+    "ramo": {
+      "viaje": "Cancellation, medical assistance and luggage on your trips.",
+      "dispositivos": "Protect your phone, laptop or tablet.",
+      "vida": "Financial support for the people who depend on you.",
+      "desempleo": "Covers your installments if you lose your job."
+    },
+    "campos": {
+      "destino": "Destination",
+      "dias": "Trip length (days)",
+      "viajeros": "Number of travelers",
+      "tipoDispositivo": "Device type",
+      "valorEquipo": "Device value",
+      "antiguedadMeses": "Device age (months)",
+      "montoAsegurado": "Insured amount",
+      "plazoAnios": "Term",
+      "ingresoMensual": "Monthly income",
+      "cuotasCubiertas": "Installments covered"
+    },
+    "opciones": {
+      "destino": {
+        "europa": "Europe",
+        "norteamerica": "North America",
+        "suramerica": "South America",
+        "asia": "Asia"
+      },
+      "tipoDispositivo": {
+        "celular": "Phone",
+        "portatil": "Laptop",
+        "tableta": "Tablet"
+      },
+      "plazoAnios": {
+        "1": "1 year",
+        "5": "5 years",
+        "10": "10 years"
+      },
+      "cuotasCubiertas": {
+        "3": "3 installments",
+        "6": "6 installments",
+        "12": "12 installments"
+      }
+    }
+  },
+  "coberturas": {
+    "cancelacion": "Trip cancellation",
+    "asistencia_medica": "Medical assistance abroad",
+    "equipaje": "Lost or delayed luggage",
+    "demora": "Flight delays",
+    "robo": "Theft with violence",
+    "dano_accidental": "Accidental damage",
+    "dano_liquidos": "Liquid damage",
+    "pantalla_rota": "Broken screen",
+    "muerte_natural": "Natural death",
+    "muerte_accidental": "Accidental death",
+    "invalidez_total": "Total and permanent disability",
+    "pago_cuotas": "Payment of your monthly installments",
+    "asesoria_laboral": "Job search advice",
+    "gastos_basicos": "Support for basic expenses"
   },
   "resultadoCotizacion": {
     "titulo": "Your quote",
-    "primaMensual": "Estimated premium",
-    "coberturas": "Included coverage",
-    "comprar": "Buy now",
-    "descartar": "Look for another option",
-    "avisoSinConsentimiento": "Without Open Finance authorization, the premium includes a surcharge."
+    "periodicidad": "Monthly premium",
+    "etiquetaFirme": "Firm quote",
+    "etiquetaEstimada": "Estimated quote",
+    "estimadaDetalle": "An estimated quote is for reference only and can't be purchased. To buy, first authorize access to your financial data and then request a new quote: authorizing doesn't turn this quote into a firm one.",
+    "autorizarParaFirme": "Authorize to get a firm price",
+    "contratar": "Buy this insurance",
+    "requiereKyc": "To buy you need to verify your identity first.",
+    "verificarIdentidad": "Verify my identity",
+    "nuevaCotizacion": "Make a new quote",
+    "invalidada": "This quote is no longer valid because you revoked your authorization. Calculate a new one to be able to buy.",
+    "vencida": "This quote expired on {fecha}. Calculate a new one to be able to buy.",
+    "verHistorial": "View my quotes",
+    "cotizarDeNuevo": "Quote again",
+    "coberturasTitulo": "Included coverage",
+    "resumenTitulo": "What you entered",
+    "requiereConsentimiento": "An estimated quote can't be purchased. Authorize the use of your data and request a new quote.",
+    "autorizarParaContratar": "Authorize my data"
+  },
+  "historial": {
+    "titulo": "Your quotes",
+    "nueva": "New quote",
+    "sinConexionNueva": "You're offline: you can't request a new quote right now.",
+    "vacio": "You haven't quoted any insurance yet. Pick one and see your price, at no cost and no commitment.",
+    "estadoFirme": "Firm quote",
+    "estadoEstimada": "Estimated quote",
+    "estadoVencida": "Expired",
+    "estadoInvalidada": "Invalidated",
+    "creadaEl": "Created on {fecha}",
+    "vigenteHasta": "Valid until {fecha}",
+    "motivoInvalidada": "It was invalidated because you revoked your data authorization.",
+    "eliminar": "Delete",
+    "confirmarEliminar": "Delete this quote from your history? This can't be undone.",
+    "avisoEstimadas": "Estimated quotes are for reference only and can't be purchased. If you authorize the use of your financial data, you'll be able to request firm quotes, which can be purchased.",
+    "autorizar": "Authorize my data"
   },
   "pago": {
-    "titulo": "Confirm your payment",
-    "resumen": "Purchase summary",
-    "metodoPago": "Payment method",
-    "confirmar": "Confirm payment",
+    "titulo": "Confirm your purchase",
+    "periodicidad": "Monthly premium",
+    "incluye": "Includes",
+    "medioPago": "Payment method",
+    "avisoSinDatos": "This test version doesn't ask for real payment details.",
+    "confirmar": "Pay {monto}",
     "procesando": "Processing your payment…",
-    "errorPago": "We couldn't process the payment. Please try again."
+    "reintentar": "Retry payment",
+    "medios": {
+      "tarjeta": "Credit card",
+      "pse": "PSE (bank transfer)",
+      "debito": "Direct debit"
+    }
   },
   "firma": {
     "titulo": "Sign your policy",
-    "instruccion": "Draw your signature to complete the purchase.",
-    "firmar": "Sign",
-    "limpiar": "Clear signature"
+    "introduccion": "The electronic signature makes your insurance contract official. Read the policy terms before signing.",
+    "documentoEtiqueta": "Your policy terms",
+    "polizaEncabezado": "Policy {numero} · {ramo}",
+    "clausulas": "1. Purpose. Solventa insures the risks described in the coverage of this policy during its term, in exchange for payment of the premium.\n2. Premium. The premium is paid every month. If payments stop, coverage may be suspended, and we will let you know before that happens.\n3. Your duties. You must give us truthful information when you buy and tell us if the conditions you declared change.\n4. Claims. If a covered event happens, report it as soon as possible. We will review your case and get back to you with the outcome.\n5. Termination. You can cancel the policy whenever you want. Solventa can only cancel it in the cases the law allows.",
+    "coberturasTitulo": "Coverage",
+    "primaMensual": "Monthly premium",
+    "vigencia": "Term",
+    "vigenciaValor": "12 months from {fecha}",
+    "heLeido": "I have read and accept my policy terms",
+    "firmar": "Sign policy",
+    "debeConfirmar": "Confirm that you read the policy terms to be able to sign.",
+    "masTarde": "Sign later",
+    "firmando": "Signing your policy…",
+    "emitiendo": "Issuing your certificate…",
+    "reintentar": "Retry"
   },
   "certificado": {
     "titulo": "Your policy is active!",
-    "mensaje": "We issued your certificate. You can now download it from your wallet.",
+    "tituloPendiente": "Your policy is signed",
+    "pendienteDetalle": "Your policy is signed. Your certificate is taking a little longer than usual and will arrive shortly; we'll let you know when it's ready.",
+    "numero": "Policy number",
+    "ramo": "Insurance",
+    "prima": "Monthly premium",
+    "vigenciaDesde": "Valid from",
+    "vigenciaHasta": "Valid until",
+    "referencia": "Payment reference",
     "descargar": "Download certificate",
-    "irABilletera": "Go to my wallet"
+    "descargaFueraDeAlcance": "Downloading isn't available in this test version.",
+    "verPoliza": "View my policy",
+    "irInicio": "Go to home"
   },
   "billetera": {
     "titulo": "My wallet",
@@ -246,6 +371,10 @@
     "pagoParametrico": {
       "titulo": "You received a payout for {evento}",
       "cuerpo": "We deposited {monto} {moneda} into your account for policy {numero}."
+    },
+    "eventos": {
+      "retraso_vuelo": "flight delay",
+      "evento_climatico": "weather event"
     }
   },
   "ajustes": {
@@ -275,7 +404,8 @@
     "generico": "Something went wrong. Please try again.",
     "sinConexion": "No internet connection.",
     "campoObligatorio": "This field is required.",
-    "documentoInvalido": "The ID number isn't valid."
+    "documentoInvalido": "The ID number isn't valid.",
+    "pagoRechazado": "Your payment was declined and you were not charged. You can try again."
   },
   "depuracion": {
     "titulo": "Debug panel",

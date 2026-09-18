@@ -1,2 +1,178 @@
-.contenedor {
+.pantalla {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+  min-height: 100%;
+  padding: var(--esp-6) var(--esp-5) var(--esp-6);
+  background: var(--color-fondo);
+}
+
+.encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+}
+
+.titulo {
+  margin: 0;
+  color: var(--color-texto);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-titulo);
+  font-weight: 500;
+}
+
+.ramo {
+  margin: 0;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-m);
+}
+
+/* --- Prima y certeza ------------------------------------------------------ */
+.bloquePrima {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--esp-2);
+}
+
+.periodicidad {
+  margin: 0;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-s);
+}
+
+.prima {
+  margin: 0;
+  color: var(--color-texto);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-titulo);
+  font-weight: 500;
+  line-height: var(--interlinea-titulo);
+}
+
+.primaTachada {
+  color: var(--color-texto-secundario);
+}
+
+/* La certeza se dice con el texto de la etiqueta; el color solo la refuerza. */
+.etiqueta {
+  display: inline-block;
+  padding: var(--esp-1) var(--esp-3);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-s);
+  font-weight: 600;
+}
+
+.etiquetaFirme {
+  background: var(--color-primario-suave);
+  color: var(--color-primario);
+}
+
+.etiquetaEstimada {
+  background: var(--color-acento-suave);
+  color: var(--color-acento-texto);
+}
+
+.bloqueEstimada {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--esp-2);
+}
+
+.bloqueEstimada > :first-child {
+  align-self: stretch;
+}
+
+/* --- Coberturas y resumen ------------------------------------------------- */
+.seccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.tituloSeccion {
+  margin: 0;
+  color: var(--color-texto);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-l);
+  font-weight: 500;
+}
+
+.listaCoberturas {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.cobertura {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  color: var(--color-texto);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-m);
+}
+
+.iconoCheck {
+  flex-shrink: 0;
+  display: flex;
+  color: var(--color-exito);
+}
+
+.resumen {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  padding: var(--esp-4);
+  border-radius: var(--radio-m);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+}
+
+.filaResumen {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-s);
+}
+
+.filaResumen dt {
+  color: var(--color-texto-secundario);
+}
+
+.filaResumen dd {
+  margin: 0;
+  color: var(--color-texto);
+  font-weight: 600;
+  text-align: right;
+}
+
+/* --- Acciones ------------------------------------------------------------- */
+.acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.motivo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--esp-1);
+}
+
+.motivo p {
+  margin: 0;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-s);
 }

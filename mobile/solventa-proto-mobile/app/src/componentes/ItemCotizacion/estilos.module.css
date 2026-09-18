@@ -1,0 +1,113 @@
+.item {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+  background: var(--color-superficie);
+  overflow: hidden;
+}
+
+.abrir {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--esp-1);
+  width: 100%;
+  min-height: var(--alto-tactil);
+  padding: var(--esp-4);
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--fuente-cuerpo);
+}
+
+.titulo {
+  color: var(--color-texto);
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.prima {
+  color: var(--color-texto);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-l);
+  font-weight: 500;
+}
+
+/* El estado se dice con el texto de la etiqueta; el color solo lo refuerza. */
+.etiqueta {
+  padding: var(--esp-1) var(--esp-2);
+  border-radius: var(--radio-s);
+  font-size: var(--texto-s);
+  font-weight: 600;
+}
+
+.etiqueta_firme {
+  background: var(--color-primario-suave);
+  color: var(--color-primario);
+}
+
+.etiqueta_estimada {
+  background: var(--color-acento-suave);
+  color: var(--color-acento-texto);
+}
+
+/* Fondo y superficie de la tarjeta son casi iguales: el borde mantiene la
+ * etiqueta visible como etiqueta. */
+.etiqueta_vencida {
+  border: 1px solid var(--color-borde);
+  background: var(--color-fondo);
+  color: var(--color-texto-secundario);
+}
+
+.etiqueta_invalidada {
+  border: 1px solid var(--color-borde);
+  background: var(--color-fondo);
+  color: var(--color-error);
+}
+
+.detalle {
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-s);
+}
+
+.motivo {
+  color: var(--color-texto);
+  font-size: var(--texto-s);
+  font-weight: 600;
+}
+
+.pie {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 var(--esp-2) var(--esp-2);
+}
+
+/* Confirmacion en linea. Recibe el foco por codigo al aparecer. */
+.confirmacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  margin: 0 var(--esp-3) var(--esp-3);
+  padding: var(--esp-3);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radio-s);
+}
+
+.confirmacion:focus {
+  outline: none;
+}
+
+.textoConfirmacion {
+  margin: 0;
+  color: var(--color-texto);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-s);
+}
+
+.accionesConfirmacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+}

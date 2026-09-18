@@ -1,2 +1,69 @@
-.contenedor {
+.pantalla {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+  min-height: 100%;
+  padding: var(--esp-6) var(--esp-5) var(--esp-6);
+  background: var(--color-fondo);
+}
+
+.encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+/* El boton "Atras" no debe estirarse a todo el ancho de la columna. */
+.volver {
+  align-self: flex-start;
+}
+
+.titulo {
+  margin: 0;
+  color: var(--color-texto);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-titulo);
+  font-weight: 500;
+}
+
+/* El h1 recibe el foco por codigo al cambiar de paso, no por el usuario. */
+.titulo:focus {
+  outline: none;
+}
+
+.tarjetas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+}
+
+/* Contenido de la hoja de reconfirmacion. */
+.listaEntidades {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.entidad {
+  padding: var(--esp-2) var(--esp-3);
+  border-radius: var(--radio-s);
+  background: var(--color-primario-suave);
+  color: var(--color-texto);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-m);
+  font-weight: 600;
+}
+
+.nota {
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-s);
 }

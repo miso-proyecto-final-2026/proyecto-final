@@ -3,8 +3,10 @@ import {
   ESTADOS_KYC,
   ESTADOS_COTIZACION,
   TIPOS_NOTIFICACION,
+  DIAS_VIGENCIA_COTIZACION,
 } from './estadoInicial';
 import { ACCIONES } from './acciones';
+import { cotizacionActiva, cotizacionVigente } from './selectores';
 
 /**
  * Reducer único del prototipo.
@@ -29,22 +31,21 @@ function bloquear(estado, motivo) {
   return estado;
 }
 
+/** Aplica `fn` a la cotizacion con ese id y deja el resto del historial igual. */
+const conCotizacion = (estado, id, fn) => ({
+  ...estado,
+  cotizaciones: estado.cotizaciones.map((c) => (c.id === id ? fn(c) : c)),
+});
+
 /**
  * Cuerpo compartido de "revocar el consentimiento" (H07): lo usan tanto
  * REVOCAR_CONSENTIMIENTO como DESCONECTAR_ENTIDAD cuando se desconecta la
- * ultima entidad conectada. Si la cotizacion vigente se calculo CON
- * consentimiento (personalizada), queda invalidada: prima, primaBase y
- * coberturas se conservan tal cual, para que se vea que esa oferta existio.
+ * ultima entidad conectada. Recorre TODO el historial: las cotizaciones
+ * firmes (personalizada) que siguen vigentes quedan invalidadas, con prima,
+ * primaBase y coberturas intactas para que se vea que esa oferta existio.
+ * Las estimadas, las vencidas y las que estan en otro estado no se tocan.
  */
 function revocarConsentimientoEstado(estado) {
-  const cotizacion =
-    estado.cotizacion && estado.cotizacion.personalizada
-      ? {
-          ...estado.cotizacion,
-          estado: ESTADOS_COTIZACION.INVALIDADA,
-          motivoInvalidacion: 'consentimiento_revocado',
-        }
-      : estado.cotizacion;
   return {
     ...estado,
     consentimiento: {
@@ -53,7 +54,15 @@ function revocarConsentimientoEstado(estado) {
       fechaOtorgamiento: estado.consentimiento.fechaOtorgamiento,
       fechaRevocacion: ahora(),
     },
-    cotizacion,
+    cotizaciones: estado.cotizaciones.map((c) =>
+      c.personalizada && cotizacionVigente(c)
+        ? {
+            ...c,
+            estado: ESTADOS_COTIZACION.INVALIDADA,
+            motivoInvalidacion: 'consentimiento_revocado',
+          }
+        : c
+    ),
   };
 }
 
@@ -156,7 +165,7 @@ export function reducer(estado, accion) {
         fechaOtorgamiento: ahora(),
         fechaRevocacion: null,
       };
-      // La cotizacion queda intacta, incluso si estaba invalidada: otorgar
+      // Las cotizaciones quedan intactas, incluso las invalidadas: otorgar
       // de nuevo NO revive una cotizacion invalidada. Hay que volver a
       // cotizar.
       return {
@@ -176,7 +185,7 @@ export function reducer(estado, accion) {
     }
 
     // Conectar una entidad adicional (varias fuentes -> oferta mas precisa).
-    // No toca la cotizacion: sumar una fuente no la invalida.
+    // No toca ninguna cotizacion: sumar una fuente no las invalida.
     case ACCIONES.CONECTAR_ENTIDAD: {
       if (!estado.consentimiento.otorgado) {
         return bloquear(estado, 'CONECTAR_ENTIDAD requiere consentimiento vigente (H06).');
@@ -215,71 +224,99 @@ export function reducer(estado, accion) {
     // =====================================================================
     // H37 · Solicitar cotización desde el móvil
     // =====================================================================
-    case ACCIONES.SOLICITAR_COTIZACION:
+    case ACCIONES.SOLICITAR_COTIZACION: {
       // Cotizar es libre: no requiere identidad verificada. Solo comprar
-      // (H17, mas abajo) la exige.
-      return {
-        ...estado,
-        cotizacion: {
-          id: nuevoId('cot'),
-          tipoSeguro: accion.tipoSeguro,
-          parametros: accion.parametros,
-          primaBase: null,
-          prima: null,
-          moneda: null,
-          coberturas: [],
-          personalizada: estado.consentimiento.otorgado,
-          estado: ESTADOS_COTIZACION.CALCULANDO,
-          motivoError: null,
-        },
+      // (H17, mas abajo) la exige. Cada solicitud AGREGA una cotizacion al
+      // historial (la mas reciente primero) y la deja como activa: nunca
+      // reemplaza ni borra las anteriores.
+      const creada = new Date();
+      const vigenciaHasta = new Date(creada);
+      vigenciaHasta.setDate(vigenciaHasta.getDate() + DIAS_VIGENCIA_COTIZACION);
+      const cotizacion = {
+        id: nuevoId('cot'),
+        tipoSeguro: accion.tipoSeguro,
+        parametros: accion.parametros,
+        primaBase: null,
+        prima: null,
+        moneda: null,
+        coberturas: [],
+        personalizada: estado.consentimiento.otorgado,
+        estimada: !estado.consentimiento.otorgado,
+        estado: ESTADOS_COTIZACION.CALCULANDO,
+        motivoError: null,
+        motivoInvalidacion: null,
+        fechaCreacion: creada.toISOString(),
+        vigenciaHasta: vigenciaHasta.toISOString(),
       };
-
-    case ACCIONES.RECIBIR_COTIZACION: {
-      if (!estado.cotizacion) return estado;
       return {
         ...estado,
-        cotizacion: {
-          ...estado.cotizacion,
-          primaBase: accion.resultado.primaBase,
-          prima: accion.resultado.primaBase,
-          moneda: accion.resultado.moneda,
-          coberturas: accion.resultado.coberturas,
-          personalizada: estado.consentimiento.otorgado,
-          estado: ESTADOS_COTIZACION.LISTA,
-        },
+        cotizaciones: [cotizacion, ...estado.cotizaciones],
+        cotizacionActivaId: cotizacion.id,
       };
     }
 
-    case ACCIONES.FALLAR_COTIZACION:
-      if (!estado.cotizacion) return estado;
+    case ACCIONES.RECIBIR_COTIZACION: {
+      if (!estado.cotizacionActivaId) return estado;
+      return conCotizacion(estado, estado.cotizacionActivaId, (c) => ({
+        ...c,
+        primaBase: accion.resultado.primaBase,
+        prima: accion.resultado.primaBase,
+        moneda: accion.resultado.moneda,
+        coberturas: accion.resultado.coberturas,
+        estado: ESTADOS_COTIZACION.LISTA,
+      }));
+    }
+
+    case ACCIONES.FALLAR_COTIZACION: {
+      if (!estado.cotizacionActivaId) return estado;
+      return conCotizacion(estado, estado.cotizacionActivaId, (c) => ({
+        ...c,
+        estado: ESTADOS_COTIZACION.ERROR,
+        motivoError: accion.motivo,
+      }));
+    }
+
+    // Ya no borra: solo deja de haber una cotizacion activa. El historial queda.
+    case ACCIONES.DESCARTAR_COTIZACION:
+      return { ...estado, cotizacionActivaId: null };
+
+    case ACCIONES.SELECCIONAR_COTIZACION:
+      if (!estado.cotizaciones.some((c) => c.id === accion.id)) {
+        return bloquear(estado, `SELECCIONAR_COTIZACION: no existe la cotización "${accion.id}".`);
+      }
+      return { ...estado, cotizacionActivaId: accion.id };
+
+    case ACCIONES.ELIMINAR_COTIZACION:
       return {
         ...estado,
-        cotizacion: {
-          ...estado.cotizacion,
-          estado: ESTADOS_COTIZACION.ERROR,
-          motivoError: accion.motivo,
-        },
+        cotizaciones: estado.cotizaciones.filter((c) => c.id !== accion.id),
+        cotizacionActivaId:
+          estado.cotizacionActivaId === accion.id ? null : estado.cotizacionActivaId,
       };
-
-    case ACCIONES.DESCARTAR_COTIZACION:
-      return { ...estado, cotizacion: null };
 
     // =====================================================================
     // H17 · Aceptar la oferta y confirmar el pago
     // =====================================================================
     case ACCIONES.CONFIRMAR_PAGO: {
-      const cot = estado.cotizacion;
-      // El chequeo de INVALIDADA va antes que el generico de "lista", para
-      // que el motivo de bloqueo sea especifico (invalidada por revocar el
-      // consentimiento) en vez del generico de "todavia no esta lista".
+      // Opera sobre la cotizacion ACTIVA. cotizacionActiva() la devuelve con
+      // el estado efectivo resuelto, asi una lista pero vencida llega como
+      // VENCIDA. Los chequeos especificos van antes que el generico de
+      // "lista", para que el motivo del bloqueo diga la causa real.
+      const cot = cotizacionActiva(estado);
       if (cot && cot.estado === ESTADOS_COTIZACION.INVALIDADA) {
         return bloquear(
           estado,
           'H17 bloqueado: la cotización fue invalidada al revocar el consentimiento.'
         );
       }
+      if (cot && cot.estado === ESTADOS_COTIZACION.VENCIDA) {
+        return bloquear(estado, 'H17 bloqueado: la cotización está vencida.');
+      }
       if (!cot || cot.estado !== ESTADOS_COTIZACION.LISTA) {
         return bloquear(estado, 'H17 requiere una cotización lista (H37).');
+      }
+      if (cot.estimada) {
+        return bloquear(estado, 'H17 bloqueado: una cotizacion estimada no puede contratarse.');
       }
       if (estado.usuario.estadoKyc !== ESTADOS_KYC.APROBADO) {
         return bloquear(estado, 'H17 requiere identidad verificada (H02).');
@@ -296,23 +333,23 @@ export function reducer(estado, accion) {
         vigenciaDesde: ahora(),
         vigenciaHasta: null,
       };
+      // La cotizacion se consumio al contratar: sale del historial.
       return {
         ...estado,
         polizas: [...estado.polizas, poliza],
-        cotizacion: null,
+        cotizaciones: estado.cotizaciones.filter((c) => c.id !== cot.id),
+        cotizacionActivaId: null,
       };
     }
 
+    // Un pago fallido NO toca la cotizacion: sigue LISTA, activa y en el
+    // historial, y se puede reintentar. Solo deja de servir cuando vence
+    // (VENCIDA, derivado) o se invalida por revocar el consentimiento. El
+    // fallo lo muestra la pantalla de pago con el motivo que recibio; el
+    // estado del negocio no cambia. El caso existe para que la accion no caiga
+    // en el "accion desconocida" del default.
     case ACCIONES.FALLAR_PAGO:
-      if (!estado.cotizacion) return estado;
-      return {
-        ...estado,
-        cotizacion: {
-          ...estado.cotizacion,
-          estado: ESTADOS_COTIZACION.ERROR,
-          motivoError: accion.motivo,
-        },
-      };
+      return estado;
 
     // =====================================================================
     // H21 · Firma electrónica de la póliza
@@ -410,14 +447,15 @@ export function reducer(estado, accion) {
       };
 
     // Cambiar región SÍ toca el negocio: cambia moneda, tipo de documento y
-    // catálogo. Por eso invalida la cotización y limpia el documento.
+    // catálogo. Por eso descarta todas las cotizaciones y limpia el documento.
     case ACCIONES.CAMBIAR_REGION:
       if (accion.region === estado.preferencias.region) return estado;
       return {
         ...estado,
         preferencias: { ...estado.preferencias, region: accion.region },
         usuario: { ...estado.usuario, documento: '' },
-        cotizacion: null,
+        cotizaciones: [],
+        cotizacionActivaId: null,
       };
 
     case ACCIONES.CAMBIAR_TAMANO_TEXTO:

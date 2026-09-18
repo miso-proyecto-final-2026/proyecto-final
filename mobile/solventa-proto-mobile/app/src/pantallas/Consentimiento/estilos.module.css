@@ -221,3 +221,8 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* Boton "volver" (llegada desde otra pantalla): no se estira a todo el ancho. */
+.volver {
+  align-self: flex-start;
+}

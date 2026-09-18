@@ -9,6 +9,7 @@ import {
   necesitaVerificacion,
   polizasSinFirmar,
   puedeCotizar,
+  totalCotizacionesVigentes,
   verificacionEnCurso,
   verificacionRechazada,
 } from '../../estado/selectores';
@@ -140,7 +141,7 @@ export default function Inicio() {
             tono="advertencia"
             accion={
               <Boton tamano="compacto" onClick={() => navigate('/cotizacion')}>
-                {t('inicio.cotizarDeNuevo')}
+                {t('inicio.verCotizaciones')}
               </Boton>
             }
           >
@@ -157,6 +158,7 @@ export default function Inicio() {
           onClick={() => navigate('/cotizacion')}
           deshabilitada={!puedeCotizar(estado)}
           motivoBloqueo={t('inicio.bloqueoSinConexion')}
+          insignia={totalCotizacionesVigentes(estado)}
         />
         <Tarjeta
           titulo={t('inicio.polizasTitulo')}

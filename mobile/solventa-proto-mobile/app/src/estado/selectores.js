@@ -25,20 +25,86 @@ export const puedeEntrarConBiometria = (estado) =>
 /** H37 es libre: cotizar no requiere identidad verificada. */
 export const puedeCotizar = (estado) => !estado.debug.sinConexion;
 
-/** H17 requiere una cotización lista (no invalidada) Y identidad verificada. */
-export const puedeComprar = (estado) =>
-  !!estado.cotizacion &&
-  estado.cotizacion.estado === ESTADOS_COTIZACION.LISTA &&
-  estado.cotizacion.estado !== ESTADOS_COTIZACION.INVALIDADA &&
-  !estado.debug.sinConexion &&
-  kycAprobado(estado);
+// --- Historial de cotizaciones (H37) ---------------------------------------
+// VENCIDA no se guarda en el estado: se deriva aqui comparando vigenciaHasta
+// con la fecha actual. Solo una cotizacion LISTA puede vencer; una invalidada,
+// con error o calculando conserva su estado.
 
-/** H07 · la cotizacion vigente quedo invalidada al revocar el consentimiento. */
-export const cotizacionInvalidada = (estado) =>
-  !!estado.cotizacion && estado.cotizacion.estado === ESTADOS_COTIZACION.INVALIDADA;
+/** Estado efectivo de una cotizacion: LISTA pasa a VENCIDA si ya paso su vigencia. */
+const estadoEfectivo = (cotizacion) =>
+  cotizacion.estado === ESTADOS_COTIZACION.LISTA &&
+  cotizacion.vigenciaHasta &&
+  new Date(cotizacion.vigenciaHasta).getTime() < Date.now()
+    ? ESTADOS_COTIZACION.VENCIDA
+    : cotizacion.estado;
 
-// TODO: cuando exista la pantalla de Cotizacion, debe mostrar el estado
-// INVALIDADA con su propia marca visual (no solo bloquear la compra).
+/** La misma cotizacion, con su estado efectivo ya resuelto. */
+const conEstadoEfectivo = (cotizacion) => {
+  const efectivo = estadoEfectivo(cotizacion);
+  return efectivo === cotizacion.estado ? cotizacion : { ...cotizacion, estado: efectivo };
+};
+
+/**
+ * La cotizacion activa (la que se ve en el resultado y la que se paga), o
+ * null. Se devuelve con el estado efectivo resuelto, asi una activa vencida
+ * llega como VENCIDA a las pantallas.
+ */
+export const cotizacionActiva = (estado) => {
+  const activa = estado.cotizaciones.find((c) => c.id === estado.cotizacionActivaId);
+  return activa ? conEstadoEfectivo(activa) : null;
+};
+
+/**
+ * Todo el historial con el estado efectivo resuelto. Conserva el orden del
+ * arreglo, que ya viene con las mas recientes primero. El calculo es
+ * derivado: nada se persiste.
+ */
+export const cotizacionesOrdenadas = (estado) => estado.cotizaciones.map(conEstadoEfectivo);
+
+/** true si el estado efectivo de la cotizacion es LISTA (no vencida). */
+export const cotizacionVigente = (cotizacion) =>
+  !!cotizacion && estadoEfectivo(cotizacion) === ESTADOS_COTIZACION.LISTA;
+
+export const totalCotizacionesVigentes = (estado) =>
+  estado.cotizaciones.filter(cotizacionVigente).length;
+
+/**
+ * Cotizaciones firmes (calculadas CON consentimiento) que siguen vigentes:
+ * son exactamente las que revocar el consentimiento invalida (H07).
+ */
+export const cotizacionesFirmesVigentes = (estado) =>
+  estado.cotizaciones.filter((c) => c.personalizada && cotizacionVigente(c));
+
+/**
+ * H17 requiere una cotizacion activa vigente y FIRME (una estimada es solo
+ * informativa y no se contrata), identidad verificada y conexion.
+ */
+export const puedeComprar = (estado) => {
+  const activa = cotizacionActiva(estado);
+  return (
+    !!activa &&
+    cotizacionVigente(activa) &&
+    !activa.estimada &&
+    kycAprobado(estado) &&
+    !estado.debug.sinConexion
+  );
+};
+
+/**
+ * La cotizacion activa esta vigente pero es estimada: para contratar hace
+ * falta autorizar el uso de datos y solicitar una cotizacion NUEVA (autorizar
+ * no convierte la estimada en firme).
+ */
+export const requiereConsentimientoParaComprar = (estado) => {
+  const activa = cotizacionActiva(estado);
+  return !!activa && cotizacionVigente(activa) && !!activa.estimada;
+};
+
+/** H07 · la cotizacion activa quedo invalidada al revocar el consentimiento. */
+export const cotizacionInvalidada = (estado) => {
+  const activa = cotizacionActiva(estado);
+  return !!activa && activa.estado === ESTADOS_COTIZACION.INVALIDADA;
+};
 
 /** No hay verificación aprobada todavía (no iniciada, en curso o rechazada). */
 export const necesitaVerificacion = (estado) =>

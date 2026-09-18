@@ -8,6 +8,8 @@
  * acciones: la pantalla recibe el resultado y decide que despachar.
  */
 
+import { COBERTURAS_RAMO, factorPrima } from '../i18n/regiones/parametrosRamo';
+
 /** Promesa que se resuelve tras `ms` milisegundos. */
 export function esperar(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -49,4 +51,55 @@ export async function conectarOpenFinance(debug, entidad) {
   await esperar(debug.latenciaMs * 2);
   if (debug.sinConexion) return { ok: false, motivo: 'sin_conexion' };
   return { ok: true, datos: { entidad } };
+}
+
+/**
+ * Simula el calculo de una cotizacion (H37).
+ *
+ * La prima final es la prima base del catalogo multiplicada por el factor
+ * del ramo segun los parametros. El servicio no sabe nada del consentimiento:
+ * si la oferta es firme o estimada lo decide el reducer al recibirla.
+ */
+export async function cotizar(debug, { ramo, parametros, primaBase, moneda }) {
+  await esperar(debug.latenciaMs);
+  if (debug.sinConexion) return { ok: false, motivo: 'sin_conexion' };
+  return {
+    ok: true,
+    datos: {
+      primaBase: Math.round(primaBase * factorPrima(ramo, parametros)),
+      moneda,
+      coberturas: COBERTURAS_RAMO[ramo],
+    },
+  };
+}
+
+/**
+ * Simula el cobro de la compra (H17). No se piden datos reales de pago:
+ * solo llega el medio elegido. Es lento a proposito (latencia x2).
+ * debug.sinConexion simula una falla de red; debug.forzarFalloPago simula un
+ * pago rechazado. En ninguno de los dos casos cambia nada en el estado: la
+ * pantalla decide que hacer.
+ */
+export async function procesarPago(debug, { medio }) {
+  await esperar(debug.latenciaMs * 2);
+  if (debug.sinConexion) return { ok: false, motivo: 'sin_conexion' };
+  if (debug.forzarFalloPago) return { ok: false, motivo: 'pago_rechazado' };
+  return {
+    ok: true,
+    datos: { referencia: `PG-${String(Date.now()).slice(-6)}`, medio },
+  };
+}
+
+/** Simula la firma electronica del condicionado (H21). */
+export async function firmarDocumento(debug) {
+  await esperar(debug.latenciaMs);
+  if (debug.sinConexion) return { ok: false, motivo: 'sin_conexion' };
+  return { ok: true };
+}
+
+/** Simula la emision del certificado de la poliza (H22). Latencia x2. */
+export async function emitirCertificadoDoc(debug) {
+  await esperar(debug.latenciaMs * 2);
+  if (debug.sinConexion) return { ok: false, motivo: 'sin_conexion' };
+  return { ok: true };
 }

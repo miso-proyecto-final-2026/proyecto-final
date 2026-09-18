@@ -19,9 +19,20 @@ import {
   resolverKyc,
   solicitarCotizacion,
 } from '../../estado/acciones';
-import { notificacionesNoLeidas } from '../../estado/selectores';
+import {
+  notificacionesNoLeidas,
+  totalCotizacionesVigentes,
+} from '../../estado/selectores';
 import { useRegion } from '../../i18n/regiones';
+import {
+  COBERTURAS_RAMO,
+  PARAMETROS_RAMO,
+  factorPrima,
+} from '../../i18n/regiones/parametrosRamo';
 import styles from './estilos.module.css';
+
+// Valor de demo para los parametros de moneda (que no tienen porDefecto).
+const VALOR_MONEDA_DEMO = 2000000;
 
 const OPCIONES_LATENCIA = [
   { etiqueta: 'Instantánea (0)', valor: 0 },
@@ -114,20 +125,60 @@ export default function PanelDepuracion() {
     dispatch(otorgarConsentimiento({ codigo: entidadDemo.codigo, nombre: entidadDemo.nombre }));
   }
 
-  // Cotiza pero NO compra: a diferencia de "Cliente con poliza", deja la
-  // cotizacion viva (estado LISTA) para poder probar que pasa cuando se
-  // revoca el consentimiento con una cotizacion personalizada pendiente.
-  function clienteConCotizacionViva() {
-    clienteConConsentimiento();
-    dispatch(solicitarCotizacion('viaje', { dias: 10, destino: 'Europa' }));
-    const ramoViaje = region.catalogo.find((item) => item.clave === 'viaje');
+  // Parametros validos para un ramo, tomados de PARAMETROS_RAMO: los mismos
+  // valores que produciria el formulario (selectores con la clave de la
+  // opcion, no con su texto), para que el resumen del resultado los pueda
+  // mostrar igual que en una cotizacion hecha a mano.
+  function parametrosDemo(clave: string) {
+    const parametros: Record<string, string | number> = {};
+    for (const definicion of PARAMETROS_RAMO[clave] ?? []) {
+      parametros[definicion.nombre] =
+        definicion.tipo === 'selector'
+          ? (definicion.opciones?.[0] ?? '')
+          : definicion.tipo === 'moneda'
+            ? VALOR_MONEDA_DEMO
+            : (definicion.porDefecto ?? definicion.min ?? 1);
+    }
+    return parametros;
+  }
+
+  // Genera una cotizacion completa (solicitar + recibir) para un ramo del
+  // catalogo de la region, con la misma prima que calcularia el servicio.
+  // Queda LISTA y ACTIVA; firme o estimada segun el consentimiento del
+  // momento en que se llama.
+  function cotizarDemo(clave: string) {
+    const entrada = region.catalogo.find((item) => item.clave === clave);
+    if (!entrada) return;
+    const parametros = parametrosDemo(clave);
+    dispatch(solicitarCotizacion(clave, parametros));
     dispatch(
       recibirCotizacion({
-        primaBase: ramoViaje ? ramoViaje.primaBase : 0,
+        primaBase: Math.round(entrada.primaBase * factorPrima(clave, parametros)),
         moneda: region.moneda,
-        coberturas: ['cancelacion', 'asistencia_medica', 'equipaje'],
+        coberturas: COBERTURAS_RAMO[clave] ?? [],
       })
     );
+  }
+
+  // Cotiza pero NO compra: a diferencia de "Cliente con poliza", deja la
+  // cotizacion viva (estado LISTA) para poder probar que pasa cuando se
+  // revoca el consentimiento con una cotizacion firme pendiente.
+  function clienteConCotizacionViva() {
+    clienteConConsentimiento();
+    cotizarDemo('viaje');
+  }
+
+  // Dos cotizaciones de ramos distintos, una SIN consentimiento (estimada) y
+  // otra CON el (firme), para comparar ambas en la lista. Al terminar queda
+  // el consentimiento otorgado y la firme (la ultima) como activa.
+  function clienteConVariasCotizaciones() {
+    clienteVerificado();
+    const [primerRamo, segundoRamo] = region.catalogo;
+    if (!primerRamo || !segundoRamo) return;
+    cotizarDemo(primerRamo.clave); // sin consentimiento -> estimada
+    const entidadDemo = region.entidades[0];
+    dispatch(otorgarConsentimiento({ codigo: entidadDemo.codigo, nombre: entidadDemo.nombre }));
+    cotizarDemo(segundoRamo.clave); // con consentimiento -> firme
   }
 
   function clienteConPoliza() {
@@ -141,15 +192,9 @@ export default function PanelDepuracion() {
         conectarEntidad({ codigo: segundaEntidad.codigo, nombre: segundaEntidad.nombre })
       );
     }
-    dispatch(solicitarCotizacion('viaje', { dias: 10, destino: 'Europa' }));
-    const ramoViaje = region.catalogo.find((item) => item.clave === 'viaje');
-    dispatch(
-      recibirCotizacion({
-        primaBase: ramoViaje ? ramoViaje.primaBase : 0,
-        moneda: region.moneda,
-        coberturas: ['cancelacion', 'asistencia_medica', 'equipaje'],
-      })
-    );
+    cotizarDemo('viaje');
+    // CONFIRMAR_PAGO opera sobre la cotizacion activa (la que acaba de
+    // quedar lista) y la elimina del historial al crear la poliza.
     dispatch(confirmarPago());
     // firmarPoliza + emitirCertificado: ver el useEffect sobre estado.polizas.
   }
@@ -244,8 +289,10 @@ export default function PanelDepuracion() {
                   </dd>
                 </div>
                 <div className={styles.filaEstado}>
-                  <dt>Cotización</dt>
-                  <dd>{estado.cotizacion ? estado.cotizacion.estado : 'ninguna'}</dd>
+                  <dt>Cotizaciones</dt>
+                  <dd>
+                    {estado.cotizaciones.length} ({totalCotizacionesVigentes(estado)} vigentes)
+                  </dd>
                 </div>
                 <div className={styles.filaEstado}>
                   <dt>Pólizas</dt>
@@ -324,6 +371,13 @@ export default function PanelDepuracion() {
                 >
                   Cliente con cotización viva
                 </Boton>
+                <Boton
+                  variante="secundario"
+                  anchoCompleto
+                  onClick={clienteConVariasCotizaciones}
+                >
+                  Cliente con varias cotizaciones
+                </Boton>
                 <Boton variante="secundario" anchoCompleto onClick={clienteConPoliza}>
                   Cliente con póliza
                 </Boton>
@@ -370,7 +424,7 @@ export default function PanelDepuracion() {
                 ))}
               </div>
               <p className={styles.avisoRegion}>
-                Cambiar de región limpia el documento y anula la cotización.
+                Cambiar de región limpia el documento y anula las cotizaciones.
               </p>
             </section>
 

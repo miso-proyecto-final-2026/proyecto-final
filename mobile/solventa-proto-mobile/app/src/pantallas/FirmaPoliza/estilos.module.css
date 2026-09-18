@@ -1,2 +1,117 @@
-.contenedor {
+.pantalla {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+  min-height: 100%;
+  padding: var(--esp-6) var(--esp-5) var(--esp-6);
+  background: var(--color-fondo);
+}
+
+.encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.titulo {
+  margin: 0;
+  color: var(--color-texto);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-titulo);
+  font-weight: 500;
+}
+
+.introduccion {
+  margin: 0;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-m);
+}
+
+/* Documento simulado: scroll interno propio, alcanzable con teclado
+ * (tabIndex 0 en el JSX), asi que necesita un foco bien visible. El foco
+ * global :focus-visible de variables.css ya lo cubre. */
+.documento {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  max-height: 40vh;
+  overflow-y: auto;
+  padding: var(--esp-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+}
+
+.documentoTitulo {
+  margin: 0;
+  color: var(--color-texto);
+  font-size: var(--texto-l);
+  font-weight: 500;
+}
+
+.clausula {
+  margin: 0;
+  color: var(--color-texto);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-s);
+}
+
+.subtitulo {
+  margin: 0;
+  color: var(--color-texto);
+  font-size: var(--texto-m);
+  font-weight: 600;
+}
+
+.coberturas {
+  margin: 0;
+  padding-left: var(--esp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  color: var(--color-texto);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-s);
+}
+
+.datos {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  padding-top: var(--esp-3);
+  border-top: 1px solid var(--color-borde);
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-s);
+}
+
+.fila dt {
+  color: var(--color-texto-secundario);
+}
+
+.fila dd {
+  margin: 0;
+  color: var(--color-texto);
+  font-weight: 600;
+  text-align: right;
+}
+
+.acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.debeConfirmar {
+  margin: 0;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-s);
 }

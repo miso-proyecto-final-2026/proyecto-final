@@ -29,6 +29,8 @@ export const ACCIONES = {
   RECIBIR_COTIZACION: 'RECIBIR_COTIZACION',
   FALLAR_COTIZACION: 'FALLAR_COTIZACION',
   DESCARTAR_COTIZACION: 'DESCARTAR_COTIZACION',
+  SELECCIONAR_COTIZACION: 'SELECCIONAR_COTIZACION',
+  ELIMINAR_COTIZACION: 'ELIMINAR_COTIZACION',
 
   // Compra, firma y certificado (H17, H21, H22)
   CONFIRMAR_PAGO: 'CONFIRMAR_PAGO',
@@ -104,7 +106,18 @@ export const fallarCotizacion = (motivo) => ({
   motivo,
 });
 
+/** Ya no borra nada: solo deja de haber una cotizacion activa. */
 export const descartarCotizacion = () => ({ type: ACCIONES.DESCARTAR_COTIZACION });
+
+export const seleccionarCotizacion = (id) => ({
+  type: ACCIONES.SELECCIONAR_COTIZACION,
+  id,
+});
+
+export const eliminarCotizacion = (id) => ({
+  type: ACCIONES.ELIMINAR_COTIZACION,
+  id,
+});
 
 export const confirmarPago = () => ({ type: ACCIONES.CONFIRMAR_PAGO });
 export const fallarPago = (motivo) => ({ type: ACCIONES.FALLAR_PAGO, motivo });

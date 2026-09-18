@@ -151,7 +151,8 @@
     "revocar": "Revocar autorización",
     "confirmarTitulo": "¿Revocar la autorización?",
     "confirmarDetalle": "Vamos a dejar de usar tu información financiera. Tus próximas cotizaciones ya no estarán personalizadas.",
-    "avisoCotizacionVigente": "Tu cotización actual dejará de ser válida.",
+    "avisoCotizacionVigente": "Tu cotización firme vigente dejará de ser válida.",
+    "avisoCotizacionesVigentes": "Tus {cantidad} cotizaciones firmes vigentes dejarán de ser válidas.",
     "confirmarRevocar": "Sí, revocar",
     "desconectarTitulo": "¿Desconectar esta entidad?",
     "desconectarDetalle": "Vamos a dejar de usar los datos de {entidad}. Las demás entidades conectadas siguen activas.",
@@ -159,7 +160,8 @@
     "ultimaEntidadTitulo": "¿Desconectar tu única entidad?",
     "ultimaEntidadDetalle": "Es la última entidad conectada: al quitarla, se revoca toda la autorización.",
     "revocadoExito": "Autorización revocada el {fecha}.",
-    "sinConexion": "Sin internet: no puedes conectar ni revocar la autorización ahora."
+    "sinConexion": "Sin internet: no puedes conectar ni revocar la autorización ahora.",
+    "volverACotizar": "Volver a mi cotización"
   },
   "inicio": {
     "saludo": "Bienvenido, {nombre}",
@@ -172,7 +174,7 @@
     "kycRechazado": "No pudimos verificar tu identidad. Puedes intentarlo de nuevo.",
     "reintentarKyc": "Reintentar verificación",
     "cotizarTitulo": "Cotizar un seguro",
-    "cotizarDescripcion": "Elige un seguro y arma tu cotización en minutos.",
+    "cotizarDescripcion": "Consulta tus cotizaciones o arma una nueva en minutos.",
     "polizasTitulo": "Mis pólizas",
     "polizasDescripcion": "Consulta tus pólizas activas y sus certificados.",
     "consentimientoTitulo": "Datos financieros",
@@ -184,43 +186,166 @@
     "bloqueoSinConexion": "No disponible sin conexión.",
     "bloqueoRequiereKyc": "Necesitas verificar tu identidad primero.",
     "cotizacionInvalidada": "Tu cotización ya no es válida: cambiaron las condiciones con las que se calculó. Puedes generar una nueva.",
-    "cotizarDeNuevo": "Cotizar de nuevo",
+    "verCotizaciones": "Ver cotizaciones",
     "cerrarSesion": "Cerrar sesión"
   },
   "cotizacion": {
-    "titulo": "Cotiza tu seguro",
-    "tipoSeguro": "Tipo de seguro",
+    "titulo": "¿Qué quieres cotizar?",
+    "sinConexion": "Sin internet: no puedes calcular una cotización ahora.",
     "calcular": "Calcular prima",
     "calculando": "Calculando tu prima…",
-    "errorCalculo": "No pudimos calcular tu cotización. Intenta de nuevo."
+    "rango": "Entre {min} y {max}",
+    "monedaAyuda": "Monto en {moneda}",
+    "compartirTitulo": "Usaremos tus datos para cotizar",
+    "compartirDetalle": "Para calcular tu precio compartiremos los datos financieros que autorizaste con estas entidades:",
+    "compartirRevocar": "Puedes revocar esta autorización cuando quieras desde la sección de consentimiento.",
+    "compartirAceptar": "Aceptar y calcular",
+    "estimadaTitulo": "Te mostraremos un precio estimado",
+    "estimadaDetalle": "Sin usar tus datos financieros calculamos un precio estimado, y el valor final podría variar. Puedes continuar así; autorizar el uso de tus datos es opcional y puedes hacerlo cuando quieras.",
+    "continuarEstimada": "Continuar con precio estimado",
+    "irAutorizar": "Autorizar mis datos",
+    "ramo": {
+      "viaje": "Cancelación, asistencia médica y equipaje en tus viajes.",
+      "dispositivos": "Protege tu celular, portátil o tableta.",
+      "vida": "Respaldo económico para quienes dependen de ti.",
+      "desempleo": "Cubre tus cuotas si pierdes tu empleo."
+    },
+    "campos": {
+      "destino": "Destino",
+      "dias": "Días de viaje",
+      "viajeros": "Número de viajeros",
+      "tipoDispositivo": "Tipo de dispositivo",
+      "valorEquipo": "Valor del equipo",
+      "antiguedadMeses": "Antigüedad del equipo (meses)",
+      "montoAsegurado": "Monto asegurado",
+      "plazoAnios": "Plazo",
+      "ingresoMensual": "Ingreso mensual",
+      "cuotasCubiertas": "Cuotas cubiertas"
+    },
+    "opciones": {
+      "destino": {
+        "europa": "Europa",
+        "norteamerica": "Norteamérica",
+        "suramerica": "Suramérica",
+        "asia": "Asia"
+      },
+      "tipoDispositivo": {
+        "celular": "Celular",
+        "portatil": "Portátil",
+        "tableta": "Tableta"
+      },
+      "plazoAnios": {
+        "1": "1 año",
+        "5": "5 años",
+        "10": "10 años"
+      },
+      "cuotasCubiertas": {
+        "3": "3 cuotas",
+        "6": "6 cuotas",
+        "12": "12 cuotas"
+      }
+    }
+  },
+  "coberturas": {
+    "cancelacion": "Cancelación del viaje",
+    "asistencia_medica": "Asistencia médica en el exterior",
+    "equipaje": "Pérdida o retraso de equipaje",
+    "demora": "Demora de vuelos",
+    "robo": "Robo con violencia",
+    "dano_accidental": "Daño accidental",
+    "dano_liquidos": "Daño por líquidos",
+    "pantalla_rota": "Pantalla rota",
+    "muerte_natural": "Muerte natural",
+    "muerte_accidental": "Muerte accidental",
+    "invalidez_total": "Invalidez total y permanente",
+    "pago_cuotas": "Pago de tus cuotas mensuales",
+    "asesoria_laboral": "Asesoría para buscar empleo",
+    "gastos_basicos": "Apoyo para gastos básicos"
   },
   "resultadoCotizacion": {
     "titulo": "Tu cotización",
-    "primaMensual": "Prima estimada",
-    "coberturas": "Coberturas incluidas",
-    "comprar": "Comprar ahora",
-    "descartar": "Buscar otra opción",
-    "avisoSinConsentimiento": "Sin autorización Open Finance, la prima incluye un recargo."
+    "periodicidad": "Prima mensual",
+    "etiquetaFirme": "Cotización firme",
+    "etiquetaEstimada": "Cotización estimada",
+    "estimadaDetalle": "Una cotización estimada es solo de referencia y no se puede contratar. Para contratar, primero autoriza la consulta de tus datos financieros y luego solicita una nueva cotización: autorizar no convierte esta cotización en firme.",
+    "autorizarParaFirme": "Autorizar para obtener un precio firme",
+    "contratar": "Contratar seguro",
+    "requiereKyc": "Para contratar necesitas verificar tu identidad primero.",
+    "verificarIdentidad": "Verificar mi identidad",
+    "nuevaCotizacion": "Hacer una nueva cotización",
+    "invalidada": "Esta cotización ya no es válida porque revocaste tu autorización. Calcula una nueva para poder contratar.",
+    "vencida": "Esta cotización venció el {fecha}. Calcula una nueva para poder contratar.",
+    "verHistorial": "Ver mis cotizaciones",
+    "cotizarDeNuevo": "Cotizar de nuevo",
+    "coberturasTitulo": "Coberturas incluidas",
+    "resumenTitulo": "Lo que ingresaste",
+    "requiereConsentimiento": "Una cotización estimada no se puede contratar. Autoriza el uso de tus datos y solicita una nueva cotización.",
+    "autorizarParaContratar": "Autorizar mis datos"
+  },
+  "historial": {
+    "titulo": "Tus cotizaciones",
+    "nueva": "Nueva cotización",
+    "sinConexionNueva": "Sin internet: no puedes pedir una cotización nueva ahora.",
+    "vacio": "Aún no has cotizado ningún seguro. Elige uno y conoce tu precio, sin costo ni compromiso.",
+    "estadoFirme": "Cotización firme",
+    "estadoEstimada": "Cotización estimada",
+    "estadoVencida": "Vencida",
+    "estadoInvalidada": "Invalidada",
+    "creadaEl": "Creada el {fecha}",
+    "vigenteHasta": "Vigente hasta el {fecha}",
+    "motivoInvalidada": "Se invalidó porque revocaste tu autorización de datos.",
+    "eliminar": "Eliminar",
+    "confirmarEliminar": "¿Eliminar esta cotización de tu historial? No se puede deshacer.",
+    "avisoEstimadas": "Las cotizaciones estimadas son solo de referencia y no se pueden contratar. Si autorizas el uso de tus datos financieros, podrás solicitar cotizaciones firmes, que sí se pueden contratar.",
+    "autorizar": "Autorizar mis datos"
   },
   "pago": {
-    "titulo": "Confirma tu pago",
-    "resumen": "Resumen de tu compra",
-    "metodoPago": "Método de pago",
-    "confirmar": "Confirmar pago",
+    "titulo": "Confirma tu compra",
+    "periodicidad": "Prima mensual",
+    "incluye": "Incluye",
+    "medioPago": "Medio de pago",
+    "avisoSinDatos": "En esta versión de prueba no se solicitan datos reales de pago.",
+    "confirmar": "Pagar {monto}",
     "procesando": "Procesando tu pago…",
-    "errorPago": "No pudimos procesar el pago. Intenta de nuevo."
+    "reintentar": "Reintentar pago",
+    "medios": {
+      "tarjeta": "Tarjeta de crédito",
+      "pse": "PSE (transferencia bancaria)",
+      "debito": "Débito automático"
+    }
   },
   "firma": {
     "titulo": "Firma tu póliza",
-    "instruccion": "Dibuja tu firma para completar la contratación.",
-    "firmar": "Firmar",
-    "limpiar": "Borrar firma"
+    "introduccion": "La firma electrónica formaliza tu contrato de seguro. Lee el condicionado antes de firmar.",
+    "documentoEtiqueta": "Condicionado de tu póliza",
+    "polizaEncabezado": "Póliza {numero} · {ramo}",
+    "clausulas": "1. Objeto. Solventa asegura los riesgos descritos en las coberturas de esta póliza durante su vigencia, a cambio del pago de la prima.\n2. Prima. La prima se paga cada mes. Si se deja de pagar, la cobertura puede suspenderse, y te avisaremos antes de que ocurra.\n3. Tus deberes. Debes darnos información veraz al contratar y avisarnos si cambian las condiciones que declaraste.\n4. Siniestros. Si ocurre un evento cubierto, repórtalo lo antes posible. Revisaremos tu caso y te responderemos con el resultado.\n5. Terminación. Puedes cancelar la póliza cuando quieras. Solventa solo puede cancelarla en los casos que la ley permite.",
+    "coberturasTitulo": "Coberturas",
+    "primaMensual": "Prima mensual",
+    "vigencia": "Vigencia",
+    "vigenciaValor": "12 meses desde el {fecha}",
+    "heLeido": "He leído y acepto el condicionado de mi póliza",
+    "firmar": "Firmar póliza",
+    "debeConfirmar": "Confirma que leíste el condicionado para poder firmar.",
+    "masTarde": "Firmar más tarde",
+    "firmando": "Firmando tu póliza…",
+    "emitiendo": "Emitiendo tu certificado…",
+    "reintentar": "Reintentar"
   },
   "certificado": {
     "titulo": "¡Tu póliza está activa!",
-    "mensaje": "Emitimos tu certificado. Ya puedes descargarlo desde tu billetera.",
+    "tituloPendiente": "Tu póliza está firmada",
+    "pendienteDetalle": "Tu póliza quedó firmada. Tu certificado se está demorando un poco más de lo normal y llegará en breve; te avisaremos cuando esté listo.",
+    "numero": "Número de póliza",
+    "ramo": "Seguro",
+    "prima": "Prima mensual",
+    "vigenciaDesde": "Vigente desde",
+    "vigenciaHasta": "Vigente hasta",
+    "referencia": "Referencia de pago",
     "descargar": "Descargar certificado",
-    "irABilletera": "Ir a mi billetera"
+    "descargaFueraDeAlcance": "La descarga no está disponible en esta versión de prueba.",
+    "verPoliza": "Ver mi póliza",
+    "irInicio": "Ir al inicio"
   },
   "billetera": {
     "titulo": "Mi billetera",
@@ -246,6 +371,10 @@
     "pagoParametrico": {
       "titulo": "Recibiste un pago por {evento}",
       "cuerpo": "Depositamos {monto} {moneda} en tu cuenta por la póliza {numero}."
+    },
+    "eventos": {
+      "retraso_vuelo": "retraso de vuelo",
+      "evento_climatico": "evento climático"
     }
   },
   "ajustes": {
@@ -275,7 +404,8 @@
     "generico": "Algo salió mal. Intenta de nuevo.",
     "sinConexion": "No hay conexión a internet.",
     "campoObligatorio": "Este campo es obligatorio.",
-    "documentoInvalido": "El número de documento no es válido."
+    "documentoInvalido": "El número de documento no es válido.",
+    "pagoRechazado": "Tu pago fue rechazado y no se realizó ningún cobro. Puedes intentarlo de nuevo."
   },
   "depuracion": {
     "titulo": "Panel de depuración",

@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Navigate, useNavigate } from 'react-router';
+import { Navigate, useLocation, useNavigate } from 'react-router';
 import Aviso from '../../componentes/Aviso';
 import Boton from '../../componentes/Boton';
 import Cargando from '../../componentes/Cargando';
 import Interruptor from '../../componentes/Interruptor';
 import Selector from '../../componentes/Selector';
-import { ESTADOS_COTIZACION } from '../../estado/estadoInicial';
 import { useDispatch, useEstado } from '../../estado/StoreProvider';
 import {
   conectarEntidad,
@@ -15,6 +14,7 @@ import {
 } from '../../estado/acciones';
 import {
   consentimientoVigente,
+  cotizacionesFirmesVigentes,
   entidadesConectadas,
   entidadesDisponibles,
 } from '../../estado/selectores';
@@ -108,9 +108,14 @@ export default function Consentimiento() {
   const estado = useEstado();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const region = useRegion();
   const formato = useFormato();
   const { t } = useTextos();
+
+  // Ruta a la que volver (p.ej. '/cotizacion') cuando otra pantalla mando al
+  // usuario a autorizar; si no viene, Consentimiento se comporta como siempre.
+  const volverA: string | undefined = location.state?.volverA;
 
   const [entidadElegida, setEntidadElegida] = useState('');
   const [agregandoEntidad, setAgregandoEntidad] = useState(false);
@@ -195,10 +200,17 @@ export default function Consentimiento() {
   // --- CARA 2: consentimiento vigente (H07) --------------------------------
   if (vigente) {
     const conectadas = entidadesConectadas(estado);
-    const hayCotizacionPersonalizadaVigente =
-      !!estado.cotizacion &&
-      estado.cotizacion.personalizada &&
-      estado.cotizacion.estado === ESTADOS_COTIZACION.LISTA;
+    // Revocar invalida TODAS las cotizaciones firmes vigentes, no solo la
+    // activa; el aviso cuenta cuantas son y habla en plural si son varias.
+    const cantidadFirmesVigentes = cotizacionesFirmesVigentes(estado).length;
+    const avisoFirmesVigentes =
+      cantidadFirmesVigentes === 0
+        ? null
+        : cantidadFirmesVigentes === 1
+          ? t('consentimiento.avisoCotizacionVigente')
+          : t('consentimiento.avisoCotizacionesVigentes', {
+              cantidad: cantidadFirmesVigentes,
+            });
 
     const entidadADesconectar = desconectandoCodigo
       ? conectadas.find((e) => e.codigo === desconectandoCodigo)
@@ -214,7 +226,17 @@ export default function Consentimiento() {
         {/* h1 real para el esquema de accesibilidad de la pantalla: el
          * titulo visible vive dentro del Aviso, tal como pide el encargo. */}
         <h1 className={styles.soloLectorPantalla}>{t('consentimiento.activoTitulo')}</h1>
-        <Aviso tono="exito" titulo={t('consentimiento.activoTitulo')}>
+        <Aviso
+          tono="exito"
+          titulo={t('consentimiento.activoTitulo')}
+          accion={
+            volverA ? (
+              <Boton tamano="compacto" onClick={() => navigate(volverA)}>
+                {t('consentimiento.volverACotizar')}
+              </Boton>
+            ) : undefined
+          }
+        >
           {t('consentimiento.activoDetalle')}
         </Aviso>
 
@@ -279,10 +301,8 @@ export default function Consentimiento() {
                       entidad: entidadADesconectar.nombre,
                     })}
               </p>
-              {esUltimaEntidad && hayCotizacionPersonalizadaVigente && (
-                <p className={styles.avisoCotizacionVigente}>
-                  {t('consentimiento.avisoCotizacionVigente')}
-                </p>
+              {esUltimaEntidad && avisoFirmesVigentes && (
+                <p className={styles.avisoCotizacionVigente}>{avisoFirmesVigentes}</p>
               )}
               <div className={styles.confirmacionAcciones}>
                 <Boton variante="peligro" onClick={confirmarDesconectar}>
@@ -382,10 +402,8 @@ export default function Consentimiento() {
             </h2>
             <p className={styles.textoConfirmacion}>{t('consentimiento.confirmarDetalle')}</p>
 
-            {hayCotizacionPersonalizadaVigente && (
-              <p className={styles.avisoCotizacionVigente}>
-                {t('consentimiento.avisoCotizacionVigente')}
-              </p>
+            {avisoFirmesVigentes && (
+              <p className={styles.avisoCotizacionVigente}>{avisoFirmesVigentes}</p>
             )}
 
             <div className={styles.confirmacionAcciones}>
@@ -408,6 +426,14 @@ export default function Consentimiento() {
 
   return (
     <div className={styles.pantalla}>
+      {volverA && (
+        <div className={styles.volver}>
+          <Boton variante="texto" tamano="compacto" onClick={() => navigate(volverA)}>
+            {t('consentimiento.volverACotizar')}
+          </Boton>
+        </div>
+      )}
+
       {mostrarRevocadoExito && estado.consentimiento.fechaRevocacion && (
         <Aviso tono="info">
           {t('consentimiento.revocadoExito', {

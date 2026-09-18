@@ -1,2 +1,93 @@
-.contenedor {
+.pantalla {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+  min-height: 100%;
+  padding: var(--esp-6) var(--esp-5) var(--esp-6);
+  background: var(--color-fondo);
+}
+
+.cabecera {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-3);
+  text-align: center;
+}
+
+.iconoExito {
+  display: flex;
+  color: var(--color-exito);
+}
+
+.iconoNeutro {
+  display: flex;
+  color: var(--color-texto-secundario);
+}
+
+.titulo {
+  margin: 0;
+  color: var(--color-texto);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-titulo);
+  font-weight: 500;
+}
+
+/* El h1 recibe el foco por codigo al montar, no por el usuario. */
+.titulo:focus {
+  outline: none;
+}
+
+.datos {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  padding: var(--esp-4);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+  background: var(--color-superficie);
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-s);
+}
+
+.fila dt {
+  color: var(--color-texto-secundario);
+}
+
+.fila dd {
+  margin: 0;
+  color: var(--color-texto);
+  font-weight: 600;
+  text-align: right;
+}
+
+.acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.grupoDescarga {
+  display: flex;
+  flex-direction: column;
+}
+
+.descarga {
+  margin: 0;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--texto-s);
+}
+
+/* Vacia no ocupa espacio (sin display:none, que la sacaria del arbol de
+ * accesibilidad y con ella el anuncio); con texto se separa del boton. */
+.descarga:not(:empty) {
+  margin-top: var(--esp-2);
 }
